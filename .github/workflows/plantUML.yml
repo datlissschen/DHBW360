@@ -1,0 +1,26 @@
+name: Generate PlantUML Diagrams
+
+on:
+  push:
+    paths:
+      - 'docs/architecture/**/*.puml'
+  workflow_dispatch:
+
+jobs:
+  generate_plantuml:
+    runs-on: ubuntu-latest
+    name: Render C4 PlantUML
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Render PlantUML to SVG
+        id: plantuml
+        uses: grassedge/generate-plantuml-action@v1.5
+        with:
+          path: docs/diagrams
+          message: "Render PlantUML files"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
