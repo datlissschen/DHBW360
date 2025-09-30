@@ -1,7 +1,0 @@
-@startuml
-actor user as u
-package Application {
-  usecase "Start game" as UC1
-}
-u --> UC1
-@enduml
