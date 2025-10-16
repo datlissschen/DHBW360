@@ -21,7 +21,7 @@ rectangle "Spielsystem" {
 
   UC_Prf --> UC_Win : <<extend>>
   UC_Prf --> UC_Lose : <<extend>>
-
+ 
 }
 
 @enduml
