@@ -3,7 +3,7 @@ name: Generate PlantUML Diagrams
 on:
   push:
     paths:
-      - 'docs/architecture/**/*.puml'
+      - 'docs/diagrams/**/*.puml'
   workflow_dispatch:
 
 jobs:
