@@ -1,7 +1,27 @@
 @startuml
-actor user as u
-package Application {
-  usecase "Start game" as UC1
+left to right direction
+actor "User" as Spieler
+
+rectangle "Spielsystem" {
+  
+  usecase "Runde starten" as UC_Start
+  usecase "Zufälliges Raum-Bild anzeigen" as UC_Bild
+  usecase "Stockwerk auswählen" as UC_Stockwerk
+  usecase "Raum auswählen" as UC_Raum
+  usecase "Antwort prüfen" as UC_Prf
+  usecase "Win-Seite anzeigen" as UC_Win
+  usecase "Lose-Seite anzeigen" as UC_Lose
+
+  Spieler --> UC_Start
+
+  UC_Start --> UC_Bild : <<include>>
+  UC_Start --> UC_Stockwerk : <<include>>
+  UC_Start --> UC_Raum : <<include>>
+  UC_Start --> UC_Prf : <<include>>
+
+  UC_Prf --> UC_Win : <<extend>>
+  UC_Prf --> UC_Lose : <<extend>>
+
 }
-u --> UC1
+
 @enduml
