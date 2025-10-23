@@ -35,5 +35,9 @@ und muss den korrekten Raum finden, der auf dem Foto gezeigt wird.
 ---
 
 ## Technologien
-- QCIS https://qgis.org/ is used for being able to select the roomes in the floorplan
+- QCIS https://qgis.org/ is used for being able to select the roomes in the floorplan.
+- Angular https://angular.dev/ is used as framework with typescript.
+- Tailwind css https://tailwindcss.com/ for modern web design.
+- s3 bucket https://aws.amazon.com/de/s3/ for working with the pictures of the rooms.
+- Docker
   
