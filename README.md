@@ -32,5 +32,8 @@ und muss den korrekten Raum finden, der auf dem Foto gezeigt wird.
 - Verbindung zwischen Bildern und Raumplan (Auswahl)
 - Ausgabe des Ergebnisses
 
-  
+---
+
+## Technologien
+- QCIS https://qgis.org/ is used for being able to select the roomes in the floorplan
   
