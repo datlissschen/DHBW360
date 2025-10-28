@@ -1,7 +1,7 @@
 # DHBW360
 
 ## Beschreibung
-Minigame, bei dem mit Hilfe eines 360° Views des Raumes geraten werden muss,  
+Es handelt sich um ein Minigame, bei dem mit Hilfe eines 360° Views des Raumes geraten werden muss,  
 in welchem Raum und auf welchem Stockwerk der DHBW Stuttgart Fakultät Technik das Foto aufgenommen wurde.  
 Diese Fotos werden nach dem Starten einer Runde angezeigt. Der Nutzer hat Zugriff auf den DHBW Fakultät Technik Grundriss  
 und muss den korrekten Raum finden, der auf dem Foto gezeigt wird.
