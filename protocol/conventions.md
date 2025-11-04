@@ -20,7 +20,7 @@ Docstrings should be used in the backend to explain functions in a meaningful wa
 
 #### Angular
 
-The components used for Angular are, on the one hand, the large component of the start page.
+The following components are used:
 - Start page (large component)
 - Score board (loaded on the start page)
 - Game page
