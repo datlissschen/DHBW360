@@ -16,7 +16,7 @@ The pictures will be shown after the start of a round. The User will get the flo
 
 ---
 
-## non-functional
+## Non-functional
 - Single Player Game
 - short response time and fast loading of the images (max. 1s)
 - clean UX
