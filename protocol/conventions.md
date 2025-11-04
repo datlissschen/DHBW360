@@ -21,14 +21,18 @@ Docstrings should be used in the backend to explain functions in a meaningful wa
 #### Angular
 
 The following components are used:
-- Start page (large component)
-- Score board (loaded on the start page)
-- Game page
-- Selection (pop-up)
-- Score (pop-up, redirect to further rounds/homepage)
-- Info (extra page with info on how to play)
-- Footer -> Imprint
-- Logo
+- Main page (large component) -> "home"
+- App -> "app"
+- Score board (loaded on the start page) ->"scoreboard"
+- Game page ->"game"
+- Selection (pop-up)-> "selection-popup"
+- Score (pop-up, redirect to further rounds/homepage) ->"score-popup"
+- Info (extra page with info on how to play) -> "info"
+- Footer -> link Imprint ->"footer"
+- Imprint -> "imprint"
+- Logo -> "logo"
+
+-> Header depends on which page you are.
 
 #### Structure
 
