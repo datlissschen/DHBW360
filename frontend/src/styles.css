@@ -4,28 +4,34 @@
 @import url('tailwindcss');
 
 [data-theme='light'] {
+  --text-medium: #777777;
+  --text-light: #FFFFFF;
+  --bg-light: #FFFFFF;
+  --border-radius: 12px;
   --background-main: #F0F6FB;
   --background-card: #FFF;
   --input-background: #FFF;
   --border-color: #DCDFE3;
   --border-color2: #606060;
   --text-hover: #FCAA46;
-  --primary-color: #930010;
-  --link-highlight: #C30012;
-  --button-hover: #7a000d;
-  --text-dark: #333333;
-  --text-strong: #000000;
-  --text-medium: #777777;
-  --text-light: #FFFFFF;
-  --bg-light: #FFFFFF;
-  --bg-dark: #F5F5F5;
   --popup-bg-color: rgba(0, 0, 0, 0.6);
   --popup-content-bg: var(--bg-dark);
   --step-bg: var(--bg-light);
-  --border-light: #e0e0e0;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --border-radius: 12px;
   --popup-border-radius: 20px;
+  --bg-dark: #f4f7fa;
+  --bg-light: #ffffff;
+  --text-dark: #4a4a4a;
+  --text-light: #ffffff;
+  --text-strong: #1a1a1a;
+  --primary-color: #E60028; /* DHBW Rot */
+  --link-highlight: #d3072a;
+  --button-hover: #b00521;
+  --podium-1: #ffd700; /* Gold */
+  --podium-2: #c0c0c0; /* Silber */
+  --podium-3: #cd7f32; /* Bronze */
+  --border-light: #eeeeee;
+  --shadow: 0 4px 12px rgba(0,0,0,0.05);
+  --border-radius: 12px;
 
   --text-primary: #2C3E50;
   --text-secondary: #666;
@@ -53,27 +59,29 @@
 }
 
 [data-theme='dark'] {
+  --bg-dark: #f4f7fa;
+  --bg-light: #ffffff;
+  --text-dark: #4a4a4a;
+  --text-light: #ffffff;
+  --text-strong: #1a1a1a;
+  --primary-color: #E60028; /* DHBW Rot */
+  --link-highlight: #d3072a;
+  --button-hover: #b00521;
+  --podium-1: #ffd700; /* Gold */
+  --podium-2: #c0c0c0; /* Silber */
+  --podium-3: #cd7f32; /* Bronze */
+  --border-light: #eeeeee;
+  --shadow: 0 4px 12px rgba(0,0,0,0.05);
+  --border-radius: 12px;
   --background-main: #1E1E2F;
   --background-card: #2A2A3B;
   --input-background: #1B1B28;
   --border-color: #3B3F4A;
   --border-color2: #606060;
   --text-hover: #FFD700;
-  --primary-color: #930010;
-  --link-highlight: #C30012;
-  --button-hover: #7a000d;
-  --text-dark: #333333;
-  --text-strong: #000000;
-  --text-medium: #777777;
-  --text-light: #FFFFFF;
-  --bg-light: #FFFFFF;
-  --bg-dark: #F5F5F5;
   --popup-bg-color: rgba(0, 0, 0, 0.6);
   --popup-content-bg: var(--bg-dark);
   --step-bg: var(--bg-light);
-  --border-light: #e0e0e0;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --border-radius: 12px;
   --popup-border-radius: 20px;
 
   --text-primary: #F0F0F5;
@@ -110,11 +118,15 @@ body {
 html, body {
   margin: 0;
   padding: 0;
-  height: 100vh; /* Wichtig: 100% Höhe */
+  height: 100%;
+  display: flex;
   width: 100vw;  /* Wichtig: 100% Breite */
   font-family: 'Poppins', sans-serif;
   color: var(--text-dark);
-  overflow: hidden; /* Verhindert Scrollbalken */
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-dark);
 }
 
 .button-blue, .button-green, .button-red, .button-yellow {
@@ -184,4 +196,11 @@ textarea:focus-visible, input:not([type='submit']):focus-visible {
   text-align: center;
   margin-bottom: 2rem;
 }
+
+app-root {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 
