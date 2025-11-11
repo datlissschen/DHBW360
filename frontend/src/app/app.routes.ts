@@ -12,3 +12,6 @@ import { RouterOutlet } from '@angular/router';
 export class AppComponent {
   title = 'dhbw360-app';
 }
+
+import {Routes} from '@angular/router';
+import {FooterComponent} from './footer/footer.component';
