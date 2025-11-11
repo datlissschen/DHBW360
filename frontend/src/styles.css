@@ -1,1 +1,182 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* In src/styles.css */
+@import url('tailwindcss');
+
+[data-theme='light'] {
+  --background-main: #F0F6FB;
+  --background-card: #FFF;
+  --input-background: #FFF;
+  --border-color: #DCDFE3;
+  --border-color2: #606060;
+  --text-hover: #FCAA46;
+  --primary-color: #930010;
+  --link-highlight: #C30012;
+  --button-hover: #7a000d;
+  --text-dark: #333333;
+  --text-strong: #000000;
+  --text-medium: #777777;
+  --text-light: #FFFFFF;
+  --bg-light: #FFFFFF;
+  --bg-dark: #F5F5F5;
+  --popup-bg-color: rgba(0, 0, 0, 0.6);
+  --popup-content-bg: var(--bg-dark);
+  --step-bg: var(--bg-light);
+  --border-light: #e0e0e0;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --border-radius: 12px;
+  --popup-border-radius: 20px;
+
+  --text-primary: #2C3E50;
+  --text-secondary: #666;
+  --placeholder-color: #999;
+
+  --button-yellow: #FCAA46;
+  --button-yellow-hover: #EFB80B;
+  --button-yellow-text: #FFF;
+
+  --button-green: #27AE60;
+  --button-green-hover: #219150;
+  --button-green-text: #FFF;
+
+  --button-red: #E74C3C;
+  --button-red-hover: #C0392B;
+  --button-red-text: #FFF;
+
+  --button-blue: #2B6D74;
+  --button-blue-hover: #22565C;
+  --button-blue-text: #FFF;
+
+  --nav-background: #FFF;
+  --nav-text: #2C3E50;
+  --shadow-card: 0 2px 8px rgb(0 0 0 / 0.05);
+}
+
+[data-theme='dark'] {
+  --background-main: #1E1E2F;
+  --background-card: #2A2A3B;
+  --input-background: #1B1B28;
+  --border-color: #3B3F4A;
+  --border-color2: #606060;
+  --text-hover: #FFD700;
+  --primary-color: #930010;
+  --link-highlight: #C30012;
+  --button-hover: #7a000d;
+  --text-dark: #333333;
+  --text-strong: #000000;
+  --text-medium: #777777;
+  --text-light: #FFFFFF;
+  --bg-light: #FFFFFF;
+  --bg-dark: #F5F5F5;
+  --popup-bg-color: rgba(0, 0, 0, 0.6);
+  --popup-content-bg: var(--bg-dark);
+  --step-bg: var(--bg-light);
+  --border-light: #e0e0e0;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --border-radius: 12px;
+  --popup-border-radius: 20px;
+
+  --text-primary: #F0F0F5;
+  --text-secondary: #A0A3B1;
+  --placeholder-color: #7A7A8B;
+
+  --button-yellow: #FCAA46;
+  --button-yellow-hover: #D6A300;
+  --button-yellow-text: #FFF;
+
+  --button-green: #27AE60;
+  --button-green-hover: #219150;
+  --button-green-text: #FFF;
+
+  --button-red: #E74C3C;
+  --button-red-hover: #C0392B;
+  --button-red-text: #FFF;
+
+  --button-blue: #2B6D74;
+  --button-blue-hover: #22565C;
+  --button-blue-text: #FFF;
+
+  --nav-background: #15151E;
+  --nav-text: #DBE0EC;
+  --shadow-card: 0 2px 6px rgb(0 0 0 / 0.4);
+}
+
+body {
+  font-family: Inter, sans-serif; /* 'sans-serif' ist ein Fallback */
+  background-color: var(--background-main);
+  color: var(--text-primary);
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.button-blue, .button-green, .button-red, .button-yellow {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.button-blue {
+  background-color: var(--button-blue);
+  color: var(--button-blue-text);
+}
+
+.button-blue:hover {
+  background-color: var(--button-blue-hover);
+}
+
+.button-yellow {
+  background-color: var(--button-yellow);
+  color: var(--button-yellow-text);
+}
+
+.button-yellow:hover {
+  background-color: var(--button-yellow-hover);
+}
+
+.button-green {
+  background-color: var(--button-green);
+  color: var(--button-green-text);
+}
+
+.button-green:hover {
+  background-color: var(--button-green-hover);
+}
+
+.button-red {
+  background-color: var(--button-red);
+  color: var(--button-red-text);
+}
+
+.button-red-hover {
+  background-color: var(--button-red-hover);
+}
+
+.button-blue:hover, .button-red:hover, .button-green:hover, .button-yellow:hover {
+  transform: scale(1.03);
+}
+
+textarea, input:not([type='submit']) {
+  background: var(--input-background);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+
+textarea:focus-visible, input:not([type='submit']):focus-visible {
+  border-color: #FFA500;
+  outline: none;
+}
+
+.page-headline {
+  font-size: var(--text-3xl);
+  color: var(--text-primary);
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
