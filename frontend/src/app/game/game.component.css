@@ -341,7 +341,7 @@
 
 .geojson-polygon-highlight {
   fillColor: var(--link-highlight);
-  fillOpacity: 0.7;
+  fill-opacity: 0.7;
   stroke: var(--primary-color);
 }
 
