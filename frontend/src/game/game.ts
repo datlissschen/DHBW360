@@ -1,14 +1,28 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, ChangeDetectionStrategy, HostListener, inject } from '@angular/core';
 
 declare var pannellum: any;
 declare var L: any;
+import { FooterComponent } from '../footer/';
+import { RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-game',
+  standalone: true,
+  imports: [CommonModule, FooterComponent, RouterLink],
   templateUrl: './game.html',
-  styleUrls: ['./game.css']
+  styleUrl: './game.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameViewComponent implements AfterViewInit {
+  private route = inject(ActivatedRoute);
+
+  // Routen-Parameter auslesen (z.B. /game?rounds=5)
+  public rounds$ = this.route.queryParamMap.pipe(
+    map(params => params.get('rounds') || '1')
+  );
 
   // Referenzen auf HTML-Elemente
   @ViewChild('panorama') panoramaEl!: ElementRef;
