@@ -1,0 +1,90 @@
+/* --- Seiten-Wrapper (speziell für Home) --- */
+.page-wrapper {
+  width: 100vw;
+  height: 100vh;
+  max-height: calc(100vw * 9 / 16);
+  aspect-ratio: 16 / 9;
+  background-color: var(--bg-light);
+  box-shadow: var(--shadow);
+  border-radius: var(--border-radius);
+  display: grid;
+  /* Layout: Header (auto), Inhalt (füllt), Footer (auto) */
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
+  overflow: hidden;
+}
+
+/* --- Header Bereich --- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border-light);
+  background-color: var(--bg-light);
+  position: relative;
+  z-index: 10;
+}
+
+.header .logo-container { display: flex; align-items: center; gap: 0.8rem; }
+.header .logo-container .logo-image { height: 80px; width: 80px; object-fit: contain; }
+.header .logo-container .logo-text { font-size: 1.2rem; font-weight: 600; color: var(--primary-color); }
+.header .action-area { display: flex; align-items: center; gap: 1.5rem; }
+
+.header #round-count {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-strong);
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius);
+  padding: 0.5rem;
+  width: 60px;
+  margin-left: 1rem;
+}
+
+.header .start-button {
+  background-color: var(--link-highlight);
+  color: var(--text-light);
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: var(--shadow);
+  margin-left: 1rem;
+  text-decoration: none; /* Für RouterLink */
+}
+
+.header .start-button:hover {
+  background-color: var(--button-hover);
+  transform: translateY(-2px);
+}
+
+label[for="round-count"] {
+  font-weight: bold;
+  margin-left: 1rem;
+}
+
+/* Responsive Anpassungen für Home (Wrapper & Header) */
+@media (max-width: 1024px) {
+  .page-wrapper {
+    border-radius: 0;
+    box-shadow: none;
+    width: 100vw;
+    height: 100vh;
+    max-height: none;
+    aspect-ratio: auto;
+  }
+  .header { padding: 1rem 1.5rem; }
+}
+
+@media (max-width: 768px) {
+  .header { flex-direction: column; gap: 1rem; }
+  .header .logo-container .logo-text { display: none; }
+  .header .action-area { width: 100%; justify-content: center; }
+  .header .action-area div { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+  .header #round-count { font-size: 0.9rem; }
+  .header .start-button { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+}

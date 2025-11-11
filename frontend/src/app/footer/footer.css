@@ -1,0 +1,9 @@
+.footer-content {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  border-top: 1px solid var(--border-light);
+  background-color: var(--bg-light);
+  flex-shrink: 0; /* Verhindert Schrumpfen im Grid */
+}
