@@ -334,3 +334,6 @@ export class GameViewComponent implements AfterViewInit {
     if (stepElement) stepElement.open = true;
   }
 }
+
+export class GameComponent {
+}
