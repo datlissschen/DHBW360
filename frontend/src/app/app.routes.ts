@@ -13,5 +13,24 @@ export class AppComponent {
   title = 'dhbw360-app';
 }
 
-import {Routes} from '@angular/router';
-import {FooterComponent} from './footer/footer.component';
+import { Routes } from '@angular/router';
+import { HomeComponent } from './home/home.component';
+import { GameComponent } from './game/game.component';
+
+export const routes: Routes = [
+  {
+    path: '',
+    component: HomeComponent,
+    title: 'DHBW360 - Home'
+  },
+  {
+    path: 'game',
+    component: GameComponent,
+    title: 'DHBW360 - Spiel'
+  },
+  // Fallback-Route: Leitet alles Unbekannte zur Home-Seite
+  {
+    path: '**',
+    redirectTo: ''
+  }
+];
