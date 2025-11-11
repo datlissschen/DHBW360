@@ -1,1 +1,55 @@
-<p>home works!</p>
+<!--
+  Seiten-Wrapper für die Home-Seite.
+  Layout: Header (auto), Inhalt (füllt), Footer (auto)
+-->
+<div class="page-wrapper">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo-container">
+      <img
+        ngSrc="dhbw360_logo.png"
+        alt="DHBW360 Logo"
+        class="logo-image"
+        width="80"
+        height="80"
+        priority
+        onerror="this.onerror=null; this.src='https://placehold.co/80x80/E60028/FFFFFF?text=Logo';">
+      <span class="logo-text">DHBW360</span>
+    </div>
+    <div class="action-area">
+      <!--
+        Dies ist jetzt kein <form> mehr, da die Navigation
+        über den Angular Router (RouterLink) erfolgt.
+      -->
+      <div>
+        <label for="round-count">Anzahl der Runden: </label>
+        <input
+          id="round-count"
+          name="round-count"
+          type="number"
+          min="1"
+          max="10"
+          [(ngModel)]="rounds"> <!-- Bindet an die 'rounds'-Variable -->
+
+        <!--
+          Dieser Button navigiert zur '/game'-Route und
+          übergibt die 'rounds' als Query-Parameter.
+        -->
+        <button
+          class="start-button"
+          [routerLink]="['/game']"
+          [queryParams]="{ rounds: rounds }">
+          Spiel starten
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SCOREBOARD (wird hier eingebettet) -->
+  <app-scoreboard></app-scoreboard>
+
+  <!-- FOOTER (wird hier eingebettet) -->
+  <app-footer></app-footer>
+
+</div>
