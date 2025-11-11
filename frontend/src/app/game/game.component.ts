@@ -2,7 +2,7 @@ import { Component, AfterViewInit, ViewChild, ElementRef, ChangeDetectionStrateg
 
 declare var pannellum: any;
 declare var L: any;
-import { RouterLink } from '@angular/router';
+//import { RouterLink } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
