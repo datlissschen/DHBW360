@@ -1,3 +1,59 @@
+.game-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  flex-grow: 1;
+  text-align: center;
+  overflow-y: auto; /* Scrollen, falls Inhalt zu groß */
+}
+.game-view h2 {
+  font-size: 2rem;
+  color: var(--text-strong);
+}
+.game-view p {
+  font-size: 1.2rem;
+  color: var(--text-dark);
+  margin-bottom: 2rem;
+}
+.game-view .back-button {
+  background-color: var(--podium-2);
+  color: var(--text-strong);
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: var(--shadow);
+  text-decoration: none; /* Für RouterLink */
+}
+.game-view .back-button:hover {
+  background-color: #aaa;
+  transform: translateY(-2px);
+}
+
+/* --- Responsive Anpassungen --- */
+@media (max-width: 1024px) {
+  .page-wrapper {
+    border-radius: 0;
+    box-shadow: none;
+    width: 100vw;
+    height: 100vh;
+    max-height: none;
+    aspect-ratio: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .game-view {
+    padding: 1rem;
+    gap: 1rem;
+  }
+}
+
 #panorama {
   width: 100%;
   height: 100%;
@@ -288,3 +344,19 @@
   fillOpacity: 0.7;
   stroke: var(--primary-color);
 }
+
+.page-wrapper {
+  width: 100vw;
+  height: 100vh;
+  max-height: calc(100vw * 9 / 16);
+  aspect-ratio: 16 / 9;
+  background-color: var(--bg-light);
+  box-shadow: var(--shadow);
+  border-radius: var(--border-radius);
+  display: grid;
+  /* Layout: Inhalt (füllt), Footer (auto) */
+  grid-template-rows: 1fr auto;
+  grid-template-columns: 1fr;
+  overflow: hidden;
+}
+
