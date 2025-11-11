@@ -3,6 +3,31 @@
 /* In src/styles.css */
 @import url('tailwindcss');
 
+
+:root {
+  --bg-dark: #f0f2f5;
+  --bg-light: #ffffff;
+  --text-dark: #333333;
+  --text-light: #ffffff;
+  --text-strong: #1a1a1a;
+
+  /* DHBW Farben */
+  --primary-color: #E60028;
+  --link-highlight: #d3072a;
+  --button-hover: #b00521;
+
+  --podium-1: #E60028;
+  --podium-2: #808080;
+  --podium-3: #a0a0a0;
+
+  /* Ränder und Schatten */
+  --border-light: #e0e0e0;
+  --shadow: 0 2px 10px rgba(0,0,0,0.08); /* Sanfterer Schatten */
+  --border-radius: 8px;
+}
+
+
+
 [data-theme='light'] {
   --text-medium: #777777;
   --text-light: #FFFFFF;
@@ -123,10 +148,10 @@ html, body {
   width: 100vw;  /* Wichtig: 100% Breite */
   font-family: 'Poppins', sans-serif;
   color: var(--text-dark);
-  overflow: hidden;
   justify-content: center;
   align-items: center;
   background-color: var(--bg-dark);
+  overflow: hidden; /* Behält das 'page-wrapper'-Layout bei */
 }
 
 .button-blue, .button-green, .button-red, .button-yellow {
@@ -202,5 +227,7 @@ app-root {
   width: 100%;
   height: 100%;
 }
+
+
 
 
