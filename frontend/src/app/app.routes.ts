@@ -1,3 +1,14 @@
-import { Routes } from '@angular/router';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
-export const routes: Routes = [];
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class AppComponent {
+  title = 'dhbw360-app';
+}
