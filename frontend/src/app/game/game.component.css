@@ -75,7 +75,7 @@
   pointer-events: all;
 }
 
-/* --- Header-Logo (Oben Links) --- */
+/* --- Header-LogoComponent (Oben Links) --- */
 .header-logo {
   position: absolute;
   top: 2rem;

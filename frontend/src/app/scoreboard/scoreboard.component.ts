@@ -4,8 +4,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   selector: 'app-scoreboard',
   standalone: true,
   imports: [],
-  templateUrl: './scoreboard.html',
-  styleUrl: './scoreboard.css',
+  templateUrl: './scoreboard.component.html',
+  styleUrl: './scoreboard.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ScoreboardComponent {}

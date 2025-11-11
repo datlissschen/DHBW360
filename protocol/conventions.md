@@ -30,7 +30,7 @@ The following components are used:
 - InfoComponent (extra page with info on how to play) -> "info"
 - Footer -> link ImprintComponent ->"footer"
 - ImprintComponent -> "imprint"
-- Logo -> "logo"
+- LogoComponent -> "logo"
 
 -> Header depends on which page you are.
 
