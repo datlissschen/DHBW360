@@ -1,0 +1,73 @@
+<div id="panorama" #panorama></div>
+
+<div class="ui-overlay">
+  <div class="header-logo">
+    <img src="assets/dhbw360_logo.png" alt="DHBW360 Logo">
+  </div>
+
+  <div class="game-info">
+    <div class="round-display">Runde X / Y</div>
+    <div class="score-display">
+      <span>Punkte</span>
+      <span class="points">1234</span>
+    </div>
+  </div>
+
+  <button class="nav-button" id="nav-up" title="Nach oben schauen" (click)="onNavUp()"></button>
+  <button class="nav-button" id="nav-down" title="Nach unten schauen" (click)="onNavDown()"></button>
+  <button class="nav-button" id="nav-left" title="Nach links drehen" (click)="onNavLeft()"></button>
+  <button class="nav-button" id="nav-right" title="Nach rechts drehen" (click)="onNavRight()"></button>
+
+  <button class="map-pin-button" id="openPopupBtn" title="Standort auswählen" (click)="onOpenPopup()">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+  </button>
+</div>
+
+<div class="popup-overlay" id="popupOverlay" #popupOverlay>
+  <div class="popup-content">
+    <div class="popup-header">
+      <h2>Standortauswahl</h2>
+      <button class="close-button" id="closeButton" (click)="onClosePopup()">&times;</button>
+    </div>
+
+    <div class="steps-container">
+      <details class="step" id="step-1" #step1 open>
+        <summary class="step-header">
+          <h3>Schritt 1: Standort auf Karte wählen</h3>
+          <span class="step-status" id="status-step-1" #status1>Nicht ausgewählt</span>
+        </summary>
+        <div class="step-content">
+          <div class="map-controls">
+            <button class="map-type-button active" data-map="world" data-type="karte">Karte</button>
+            <button class="map-type-button" data-map="world" data-type="satellit">Satellit</button>
+          </div>
+          <div id="map-world" class="map-container" #mapWorld></div>
+        </div>
+      </details>
+
+      <details class="step disabled" id="step-2" #step2>
+        <summary class="step-header">
+          <h3>Schritt 2: Etage auswählen</h3>
+          <span class="step-status" id="status-step-2" #status2>Nicht ausgewählt</span>
+        </summary>
+        <div class="step-content">
+          <p>Wähle den Gebäudeteil auf dem Grundriss aus.</p>
+          <div id="map-floor" class="map-container" #mapFloor></div>
+        </div>
+      </details>
+
+      <details class="step disabled" id="step-3" #step3>
+        <summary class="step-header">
+          <h3>Schritt 3: Raum auswählen</h3>
+          <span class="step-status" id="status-step-3" #status3>Nicht ausgewählt</span>
+        </summary>
+        <div class="step-content">
+          <p>Wähle den genauen Raum aus.</p>
+          <div id="map-room" class="map-container" #mapRoom></div>
+        </div>
+      </details>
+    </div>
+
+    <button class="submit-button" id="submitButton" (click)="onSubmit()">Submit</button>
+  </div>
+</div>
