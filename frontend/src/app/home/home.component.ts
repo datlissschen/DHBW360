@@ -1,9 +1,9 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { FooterComponent } from '../footer';
-import { ScoreboardComponent } from '../scoreboard';
 import { RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Für [(ngModel)]
+import { FormsModule } from '@angular/forms';
+import {FooterComponent} from '../footer/footer.component';
+import {ScoreboardComponent} from '../scoreboard/scoreboard.component'; // Für [(ngModel)]
 
 @Component({
   selector: 'app-home',
