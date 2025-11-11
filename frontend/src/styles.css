@@ -108,8 +108,13 @@ body {
 }
 
 html, body {
-  height: 100%;
   margin: 0;
+  padding: 0;
+  height: 100vh; /* Wichtig: 100% Höhe */
+  width: 100vw;  /* Wichtig: 100% Breite */
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-dark);
+  overflow: hidden; /* Verhindert Scrollbalken */
 }
 
 .button-blue, .button-green, .button-red, .button-yellow {
