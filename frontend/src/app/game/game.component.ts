@@ -6,12 +6,11 @@ import { RouterLink } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import {FooterComponent} from '../footer/footer.component';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, FooterComponent, RouterLink],
+  imports: [CommonModule],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
