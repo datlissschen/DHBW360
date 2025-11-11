@@ -27,9 +27,9 @@ The following components are used:
 - Game page ->"game"
 - Selection (pop-up)-> "selection-popup"
 - Score (pop-up, redirect to further rounds/homepage) ->"score-popup"
-- Info (extra page with info on how to play) -> "info"
-- Footer -> link Imprint ->"footer"
-- Imprint -> "imprint"
+- InfoComponent (extra page with info on how to play) -> "info"
+- Footer -> link ImprintComponent ->"footer"
+- ImprintComponent -> "imprint"
 - Logo -> "logo"
 
 -> Header depends on which page you are.
