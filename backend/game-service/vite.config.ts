@@ -19,10 +19,10 @@ export default defineConfig(({ command }) => {
             target: 'esnext',
             outDir: 'dist',
             rollupOptions: {
-                input: 'src/server.ts',
+                input: 'src/index.ts',
                 output: {
                     format: 'es',
-                    entryFileNames: 'server.js',
+                    entryFileNames: 'index.js',
                 },
             },
         },
@@ -45,7 +45,7 @@ export default defineConfig(({ command }) => {
         config.plugins!.push(
             VitePluginNode({
                 adapter: 'express',
-                appPath: './src/server.ts',
+                appPath: './src/index.ts',
                 exportName: 'viteNodeApp',
             })
         );
