@@ -1,16 +1,16 @@
 import dotenv from 'dotenv';
-dotenv.config();
-import {downloadAllFiles} from './s3'
-import {selectRandomRoom} from "@/random-selector";
 import {startExpressApp} from "@/api/express-app";
-import {readDownloadedImages} from "@/image-service";
+import {initDatabase} from "@/database";
+import {loadAllRooms} from "@/room-manager";
 
-/*downloadAllFiles().then(() => {
-    console.log('Download all files');
-})*/
+dotenv.config();
 
-readDownloadedImages()
+async function startup() {
+    await initDatabase()
+    await loadAllRooms()
+    startExpressApp()
+}
 
-startExpressApp()
-
-selectRandomRoom()
+startup().then(() => {
+    console.info("Startup successful")
+})

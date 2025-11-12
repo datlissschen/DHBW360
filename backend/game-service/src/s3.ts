@@ -31,8 +31,8 @@ export async function downloadAllFiles() {
     }
 }
 
-async function downloadFile(key: string) {
-    const downloadDir = path.resolve('../download');
+export async function downloadFile(key: string) {
+    const downloadDir = path.resolve('download');
     fs.mkdirSync(downloadDir, { recursive: true });
     const getCommand = new GetObjectCommand({
         Bucket: process.env.S3_BUCKET_NAME!,
@@ -40,6 +40,7 @@ async function downloadFile(key: string) {
     });
     const { Body } = await s3.send(getCommand);
     const localPath = path.join(downloadDir, key);
+    console.log("downloaded to path ", localPath);
     fs.mkdirSync(path.dirname(localPath), { recursive: true });
     const fileStream = fs.createWriteStream(localPath);
     Body!.transformToByteArray().then(data => {

@@ -1,6 +1,19 @@
-import {available_rooms} from "@/image-service";
+import {availableRooms, Room} from "@/room-manager";
 
-export function selectRandomRoom() {
-    const idx = Math.floor(Math.random() * 100 / available_rooms.length)
-    return available_rooms[idx]
+export function selectRandomRooms(rounds: number) {
+    const allRooms = Array.from(availableRooms.values())
+    if (allRooms.length <= rounds) {
+        return allRooms;
+    }
+    const selectedRooms: Room[] = []
+    const usedIdxs: number[] = []
+    for (let i = 0; i < rounds; i++) {
+        let idx = -1;
+        do {
+            idx = Math.floor(Math.random() * allRooms.length)
+        } while (usedIdxs.includes(idx));
+        usedIdxs.push(idx);
+        selectedRooms.push(allRooms[idx]);
+    }
+    return selectedRooms
 }
