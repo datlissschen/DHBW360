@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "target": "ES2022",
+        "moduleResolution": "Node",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "strict": true,
+        "baseUrl": "src",
+        "paths": {
+            "@/*": ["*"]
+        },
+        "allowJs": false,
+        "skipLibCheck": true
+    },
+    "include": [
+        "src",
+        "vite.config.ts"
+    ]
+}

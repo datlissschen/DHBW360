@@ -17,9 +17,9 @@ export default defineConfig(({ command }) => {
         build: {
             ssr: true,
             target: 'esnext',
-            outDir: 'game-service/dist',
+            outDir: 'score-service/dist',
             rollupOptions: {
-                input: 'game-service/src/index.ts',
+                input: 'score-service/src/index.ts',
                 output: {
                     format: 'es',
                     entryFileNames: 'index.js',
@@ -30,7 +30,7 @@ export default defineConfig(({ command }) => {
             globals: true,
             environment: 'node',
             alias: {
-                '@': path.resolve(__dirname, './game-service/src')
+                '@': path.resolve(__dirname, './score-service/src')
             }
         },
         plugins: [
@@ -45,7 +45,7 @@ export default defineConfig(({ command }) => {
         config.plugins!.push(
                 VitePluginNode({
                     adapter: 'express',
-                    appPath: './game-service/src/index.ts',
+                    appPath: './score-service/src/index.ts',
                     exportName: 'viteNodeApp',
                 })
         );
