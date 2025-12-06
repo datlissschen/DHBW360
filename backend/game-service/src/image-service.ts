@@ -11,18 +11,15 @@ export function readDownloadedImages() {
 
 export async function ensureImageFile(fileName: string) {
     const fullFilePath = path.resolve('download', fileName);
-    console.log("ensure image file ", fullFilePath);
     try {
         await fs.access(fullFilePath);
-        console.log('Datei existiert bereits:', fullFilePath);
-
     } catch (error) {
-        console.log('Datei nicht gefunden, starte Download...');
+        console.log(`File ${fileName} not found. Start download...`);
         try {
             await downloadFile(fileName);
-            console.log('Download abgeschlossen:', fullFilePath);
+            console.log('Download completed. File saved at: ', fullFilePath);
         } catch (downloadError) {
-            console.error('Fehler beim Erstellen des Ordners oder beim Download:', downloadError);
+            console.error('Error while downloading file:', downloadError);
             throw downloadError;
         }
     }

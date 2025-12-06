@@ -1,15 +1,17 @@
 import { executeDBQuery } from "./database";
 
 export class Room {
-    roomId: String = ""
+    roomId: string = ""
     locationId: string = ""
     floorNumber: number = 0
+    floorId: string = ""
     qualifiedName: string = ""
 
     constructor(roomId: string, locationId: string, floorNumber: number) {
         this.roomId = roomId;
         this.locationId = locationId;
         this.floorNumber = floorNumber;
+        this.floorId = this.locationId + "_" + this.floorNumber;
         this.qualifiedName = this.locationId + "_" + this.roomId.substring(0, 1) + this.floorNumber + "_" + this.roomId.substring(1)
     }
 }
