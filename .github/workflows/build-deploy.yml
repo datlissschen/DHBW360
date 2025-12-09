@@ -111,7 +111,7 @@ jobs:
                     key: ${{ secrets.DEPLOY_KEY }}
                     source: "backend/game-service/dist/**"
                     target: "/home/tinf24b/dhbw360/backend/game-service"
-                    strip_components: 1
+                    strip_components: 2
 
             - name: Copy score-service dist/ to server
               uses: appleboy/scp-action@v0.1.7
@@ -121,7 +121,7 @@ jobs:
                   key: ${{ secrets.DEPLOY_KEY }}
                   source: "backend/score-service/dist/**"
                   target: "/home/tinf24b/dhbw360/backend/score-service"
-                  strip_components: 1
+                  strip_components: 2
 
             - name: Copy docker-compose.yml to server
               uses: appleboy/scp-action@v0.1.7
