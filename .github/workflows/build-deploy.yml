@@ -131,6 +131,7 @@ jobs:
                   key: ${{ secrets.DEPLOY_KEY }}
                   source: "docker/docker-compose.yml"
                   target: "/home/tinf24b/dhbw360/"
+                  strip_components: 1
 
             -   name: Restart frontend and backend Docker container
                 uses: appleboy/ssh-action@v1.0.3
