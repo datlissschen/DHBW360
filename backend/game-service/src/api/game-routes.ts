@@ -63,7 +63,7 @@ function checkRequest(req: express.Request, res: express.Response): [any, Game] 
     }
     const game = getGameByUserId(userId)
     if (!game) {
-        res.status(StatusCodes.BAD_REQUEST).json({
+        res.status(StatusCodes.NOT_FOUND).json({
             error: "No game found with given user id"
         });
         return undefined;
