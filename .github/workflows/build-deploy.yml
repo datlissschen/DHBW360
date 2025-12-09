@@ -24,7 +24,7 @@ jobs:
             -   name: Clean install dependencies
                 run: |
                     cd frontend
-                    rm -rf node_modules package-lock.json
+                    rm -rf node_modules
 
             -   name: Install dependencies
                 run: |
