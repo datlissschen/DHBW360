@@ -46,6 +46,16 @@ jobs:
                     target: "/home/tinf24b/dhbw360/frontend"
                     strip_components: 1
 
+            - name: Copy frontend Dockerfile to server
+              uses: appleboy/scp-action@v0.1.7
+              with:
+                  host: vsv-research.volkmann-webservices.de
+                  username: tinf24b
+                  key: ${{ secrets.DEPLOY_KEY }}
+                  source: "frontend/Dockerfile"
+                  target: "/home/tinf24b/dhbw360/frontend"
+                  strip_components: 1
+
             -   name: Clean old frontend build on server
                 uses: appleboy/ssh-action@v0.1.10
                 with:
