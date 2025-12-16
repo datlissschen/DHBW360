@@ -1,0 +1,38 @@
+#  QGIS Digitization Workflow (Quick Guide)
+
+This guide describes the essential steps for setting up a QGIS project, digitizing a floor plan, and exporting the resulting data.
+
+---
+
+## 1. Project & Image Load
+* **New Project:** Start QGIS and select **Project → New**
+* **Load Image:** Add the floor plan image via **Layer → Add Raster Layer...**
+
+---
+
+## 2. Layer Creation & Attributes
+* **Create Layer:** Create a **New GeoPackage Layer** (or Shapefile) via **Layer → Create Layer...**
+* **Geometry Type:** **Polygon**
+* **Add Field:**
+    * **Name:** 'room_id'
+    * **Type:** Text
+
+---
+
+## 3. Digitizing Features
+* **Start Edit:** Select the layer and click **Toggle Editing** ()
+* **Draw:** Click **Add Polygon Feature** () and trace the room boundaries.
+* **Attribute:** **Right-click** to close the polygon and enter the value for **'room_id'**.
+
+---
+
+## 4. Exporting Data
+* **Stop Edit:** Click **Toggle Editing** and **Save** edits.
+* **Export:** **Right-click** the layer → **Export → Save Features As...**
+* **Format:** **GeoJSON**
+* **CRITICAL:** **Uncheck** “Add saved file to map.”
+
+---
+
+## 🖥️ Technologies
+* **QGIS:** https://qgis.org/ is used for creating and managing geospatial data.

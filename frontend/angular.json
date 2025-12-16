@@ -15,6 +15,8 @@
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
+            "outputPath": "dist/frontend",
+            "index": "src/index.html",
             "assets": [
               {
                 "glob": "**/*",
@@ -22,7 +24,13 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/pannellum/build/pannellum.css",
+              "node_modules/leaflet/dist/leaflet.css"
+            ],
+            "scripts": [
+              "node_modules/pannellum/build/pannellum.js",
+              "node_modules/leaflet/dist/leaflet.js"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",
