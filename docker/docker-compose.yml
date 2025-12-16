@@ -3,6 +3,7 @@ services:
   frontend:
     build:
       context: ./frontend/
+      dockerfile: ./Dockerfile
     ports:
       - 4000:4000
     volumes:
@@ -13,7 +14,7 @@ services:
   game-service:
     build:
       context: ./backend/
-      dockerfile: ./backend/game-service/Dockerfile
+      dockerfile: ./game-service/Dockerfile
     ports:
       - 8081:8081
     volumes:
@@ -23,17 +24,17 @@ services:
       - campus-app
       - dhbw360
   score-service:
-      build:
-        context: ./backend/
-        dockerfile: ./backend/score-service/Dockerfile
-      ports:
-        - 8082:8082
-      volumes:
-        - ./backend/score-service/dist/:/dhbw360/app/dist
-        - ./backend/score-service/.env:/dhbw360/app/.env
-      networks:
-        - campus-app
-        - dhbw360
+    build:
+      context: ./backend/
+      dockerfile: ./score-service/Dockerfile
+    ports:
+      - 8082:8082
+    volumes:
+      - ./backend/score-service/dist/:/dhbw360/app/dist
+      - ./backend/score-service/.env:/dhbw360/app/.env
+    networks:
+      - campus-app
+      - dhbw360
 networks:
   dhbw360:
   campus-app:
