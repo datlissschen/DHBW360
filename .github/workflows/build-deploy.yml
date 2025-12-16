@@ -1,0 +1,175 @@
+name: Code Analysis and build + deploy Frontend & Backend services
+
+on:
+    push:
+        branches: ['**']
+    pull_request:
+        branches: ['**']
+    workflow_dispatch:
+
+jobs:
+    build-and-deploy:
+        name: Build and deploy
+        if: github.ref == 'refs/heads/ci-cd-pipeline'
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v3
+
+            -   name: Setup Node.js
+                uses: actions/setup-node@v3
+                with:
+                    node-version: '22'
+
+            -   name: Clean install dependencies
+                run: |
+                    cd frontend
+                    rm -rf node_modules
+
+            -   name: Install dependencies
+                run: |
+                    cd frontend
+                    npm ci --force
+
+            -   name: Build Angular (Browser + Server)
+                run: |
+                    cd frontend
+                    npm run build
+
+            -   name: Copy package.json to server
+                uses: appleboy/scp-action@v0.1.7
+                with:
+                    host: vsv-research.volkmann-webservices.de
+                    username: tinf24b
+                    key: ${{ secrets.DEPLOY_KEY }}
+                    source: "frontend/package.json"
+                    target: "/home/tinf24b/dhbw360/frontend"
+                    strip_components: 1
+
+            - name: Copy frontend Dockerfile to server
+              uses: appleboy/scp-action@v0.1.7
+              with:
+                  host: vsv-research.volkmann-webservices.de
+                  username: tinf24b
+                  key: ${{ secrets.DEPLOY_KEY }}
+                  source: "frontend/Dockerfile"
+                  target: "/home/tinf24b/dhbw360/frontend"
+                  strip_components: 1
+
+            -   name: Clean old frontend build on server
+                uses: appleboy/ssh-action@v0.1.10
+                with:
+                    host: vsv-research.volkmann-webservices.de
+                    username: tinf24b
+                    key: ${{ secrets.DEPLOY_KEY }}
+                    script: |
+                        rm -rf /home/tinf24b/dhbw360/frontend/dist/frontend/browser
+                        rm -rf /home/tinf24b/dhbw360/frontend/dist/frontend/server
+
+            -   name: Prepare deploy folder
+                run: |
+                    mkdir -p frontend_deploy
+                    cp -r frontend/dist/frontend/browser frontend_deploy/
+                    cp -r frontend/dist/frontend/server frontend_deploy/
+
+            -   name: Copy built Angular app (dist/) to server
+                uses: appleboy/scp-action@v0.1.7
+                with:
+                    host: vsv-research.volkmann-webservices.de
+                    username: tinf24b
+                    key: ${{ secrets.DEPLOY_KEY }}
+                    source: "frontend_deploy"
+                    target: "/home/tinf24b/dhbw360/frontend/dist/frontend"
+                    strip_components: 1
+
+            # --- BACKEND BUILD & DEPLOY ---
+
+            -   name: Install backend dependencies
+                run: |
+                    cd backend
+                    npm ci
+
+            -   name: Build backend
+                run: |
+                    cd backend
+                    npm run build:all
+
+            -   name: Copy backend package.json to server
+                uses: appleboy/scp-action@v0.1.7
+                with:
+                    host: vsv-research.volkmann-webservices.de
+                    username: tinf24b
+                    key: ${{ secrets.DEPLOY_KEY }}
+                    source: "backend/package.json"
+                    target: "/home/tinf24b/dhbw360/backend"
+                    strip_components: 1
+
+            -   name: Clean old game-service and score-service build on server
+                uses: appleboy/ssh-action@v0.1.10
+                with:
+                    host: vsv-research.volkmann-webservices.de
+                    username: tinf24b
+                    key: ${{ secrets.DEPLOY_KEY }}
+                    script: |
+                        rm -rf /home/tinf24b/dhbw360/backend/game-service/dist && rm -rf /home/tinf24b/dhbw360/backend/score-service/dist
+
+            -   name: Copy game-service Dockerfile to server
+                uses: appleboy/scp-action@v0.1.7
+                with:
+                    host: vsv-research.volkmann-webservices.de
+                    username: tinf24b
+                    key: ${{ secrets.DEPLOY_KEY }}
+                    source: "backend/game-service/Dockerfile"
+                    target: "/home/tinf24b/dhbw360/backend/game-service"
+                    strip_components: 2
+
+            -   name: Copy game-service dist/ to server
+                uses: appleboy/scp-action@v0.1.7
+                with:
+                    host: vsv-research.volkmann-webservices.de
+                    username: tinf24b
+                    key: ${{ secrets.DEPLOY_KEY }}
+                    source: "backend/game-service/dist/**"
+                    target: "/home/tinf24b/dhbw360/backend/game-service"
+                    strip_components: 2
+
+            - name: Copy score-service Dockerfile to server
+              uses: appleboy/scp-action@v0.1.7
+              with:
+                  host: vsv-research.volkmann-webservices.de
+                  username: tinf24b
+                  key: ${{ secrets.DEPLOY_KEY }}
+                  source: "backend/score-service/Dockerfile"
+                  target: "/home/tinf24b/dhbw360/backend/score-service"
+                  strip_components: 2
+
+            - name: Copy score-service dist/ to server
+              uses: appleboy/scp-action@v0.1.7
+              with:
+                  host: vsv-research.volkmann-webservices.de
+                  username: tinf24b
+                  key: ${{ secrets.DEPLOY_KEY }}
+                  source: "backend/score-service/dist/**"
+                  target: "/home/tinf24b/dhbw360/backend/score-service"
+                  strip_components: 2
+
+            - name: Copy docker-compose.yml to server
+              uses: appleboy/scp-action@v0.1.7
+              with:
+                  host: vsv-research.volkmann-webservices.de
+                  username: tinf24b
+                  key: ${{ secrets.DEPLOY_KEY }}
+                  source: "docker/docker-compose.yml"
+                  target: "/home/tinf24b/dhbw360/"
+                  strip_components: 1
+
+            -   name: Restart frontend and backend Docker container
+                uses: appleboy/ssh-action@v1.0.3
+                with:
+                    host: vsv-research.volkmann-webservices.de
+                    username: tinf24b
+                    key: ${{ secrets.DEPLOY_KEY }}
+                    script: |
+                        cd /home/tinf24b/dhbw360
+                        docker compose down
+                        docker compose up -d --build

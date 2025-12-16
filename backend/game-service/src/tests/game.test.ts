@@ -49,6 +49,17 @@ describe('Test game workflow', () => {
         session = supertestSession(expressApp);
     });
 
+    it('should submit an answer without a game session and without authentication and fail with 401 UNAUTHORIZED', async () => {
+        const postData = {
+            selectedLocationId: "LE1",
+            selectedFloorId: "LE2_2",
+            selectedRoomId: "Z1",
+            userId: userId,
+        }
+        const response = await httpPost(session, '/game/check-answer', '', postData);
+        expect(response.status).toBe(401);
+    })
+
     it('should start a new game without authentication and 2 rounds', async () => {
         const rounds = 2;
         const postData = {
