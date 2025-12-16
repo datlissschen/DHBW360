@@ -1,5 +1,5 @@
 import express, {Router} from "express";
-import {checkAnswer, Game, getGameByUserId, saveGame, startGame, stopGame} from "@/game-manager";
+import {calculateScore, checkAnswer, Game, getGameByUserId, saveGame, startGame, stopGame} from "@/game-manager";
 import {StatusCodes} from 'http-status-codes';
 
 const gameRouter = Router();
@@ -44,6 +44,10 @@ gameRouter.post('/check-answer', async (req: express.Request, res: express.Respo
     const userId = data[0]
     const game = data[1]
     const correctAnswer = checkAnswer(game, selectedLocationId, selectedFloorId, selectedRoomId);
+    const correctRoom = game.rounds[game.currentRoundNumber].room;
+    const roundScore = calculateScore(correctRoom, selectedLocationId, selectedFloorId, selectedRoomId);
+    game.rounds[game.currentRoundNumber].score = roundScore;
+    saveGame(userId, game);
     const {rounds, ...gameWithoutRounds} = game;
     gameWithoutRounds.currentRoundNumber++
     res.json({correctAnswer: correctAnswer, gameEnd: game.currentRoundNumber == game.maxRounds, game: gameWithoutRounds});

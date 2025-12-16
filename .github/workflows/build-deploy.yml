@@ -103,6 +103,16 @@ jobs:
                     script: |
                         rm -rf /home/tinf24b/dhbw360/backend/game-service/dist && rm -rf /home/tinf24b/dhbw360/backend/score-service/dist
 
+            -   name: Copy game-service Dockerfile to server
+                uses: appleboy/scp-action@v0.1.7
+                with:
+                    host: vsv-research.volkmann-webservices.de
+                    username: tinf24b
+                    key: ${{ secrets.DEPLOY_KEY }}
+                    source: "backend/game-service/Dockerfile"
+                    target: "/home/tinf24b/dhbw360/backend/game-service"
+                    strip_components: 2
+
             -   name: Copy game-service dist/ to server
                 uses: appleboy/scp-action@v0.1.7
                 with:
@@ -112,6 +122,16 @@ jobs:
                     source: "backend/game-service/dist/**"
                     target: "/home/tinf24b/dhbw360/backend/game-service"
                     strip_components: 2
+
+            - name: Copy score-service Dockerfile to server
+              uses: appleboy/scp-action@v0.1.7
+              with:
+                  host: vsv-research.volkmann-webservices.de
+                  username: tinf24b
+                  key: ${{ secrets.DEPLOY_KEY }}
+                  source: "backend/score-service/Dockerfile"
+                  target: "/home/tinf24b/dhbw360/backend/score-service"
+                  strip_components: 2
 
             - name: Copy score-service dist/ to server
               uses: appleboy/scp-action@v0.1.7

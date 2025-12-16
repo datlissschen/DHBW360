@@ -1,6 +1,6 @@
 import {selectRandomRooms} from "@/random-selector";
 import {ensureImageFile} from "@/image-service";
-import { Room } from "./room-manager";
+import {getRoomById, Room} from "./room-manager";
 
 export interface Game {
     gameId: string;
@@ -14,6 +14,7 @@ export interface Round {
     room: Room;
     floorNumber: number;
     roomImgURL: string;
+    score: number | undefined;
 }
 
 // Map<UserId, Game>
@@ -32,7 +33,8 @@ export async function startGame(rounds: number, userId: string): Promise<Game> {
             roundNumber: roundNumber++,
             room: room,
             floorNumber: room.floorNumber,
-            roomImgURL: `rooms/${room.qualifiedName}.jpg`
+            roomImgURL: `rooms/${room.qualifiedName}.jpg`,
+            score: undefined
         });
     }
     const game: Game = {
@@ -65,3 +67,16 @@ export function checkAnswer(game: Game, selectedLocationId: string, selectedFloo
     return correctLocationId == selectedLocationId && correctFloorId == selectedFloorId && correctRoomId == selectedRoomId;
 }
 
+export function calculateScore(correctRoom: Room, selectedLocationId: string, selectedFloorId: string, selectedRoomId: string) {
+    let score = 0;
+    if (selectedLocationId == correctRoom.locationId) {
+        score += 10;
+    }
+    if (selectedFloorId == correctRoom.floorId) {
+        score += 20;
+    }
+    if (selectedRoomId == correctRoom.roomId) {
+        score += 40;
+    }
+    return score;
+}
