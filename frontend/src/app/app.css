@@ -1,6 +1,0 @@
-/* Stellt sicher, dass die Root-Komponente den vollen Platz einnimmt */
-:host {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
