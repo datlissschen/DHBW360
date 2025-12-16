@@ -1,0 +1,25 @@
+name: dhbw360
+services:
+  frontend:
+    build:
+      context: ../frontend/
+      dockerfile: ../frontend/Dockerfile
+    ports:
+      - 4205:4000
+    volumes:
+      - ../frontend/dist/:/dhbw360/app/dist
+    networks:
+      - dhbw360
+  game-service:
+      build:
+        context: ../backend/
+        dockerfile: ../backend/game-service/Dockerfile
+      ports:
+        - 8085:8080
+      volumes:
+        - ../backend/game-service/dist/:/dhbw360/app/dist
+        - ../backend/game-service/.env:/dhbw360/app/.env
+      networks:
+        - dhbw360
+networks:
+  dhbw360:
