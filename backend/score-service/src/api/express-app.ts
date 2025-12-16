@@ -1,16 +1,14 @@
 import express from 'express';
-import imageRouter from "@/api/image-routes";
-import gameRouter from "@/api/game-routes";
+import scoreRouter from "@/api/score-routes";
 
 const expressApp = express();
 
 expressApp.use(express.json());
 expressApp.use(express.urlencoded({ extended: true }));
-expressApp.use('/img', imageRouter);
-expressApp.use('/game', gameRouter);
+expressApp.use('/score', scoreRouter);
 
 export function startExpressApp() {
-    const port = Number(process.env.EXPRESS_PORT || 8081);
+    const port = Number(process.env.EXPRESS_PORT || 8082);
     expressApp.listen(port, '0.0.0.0', () => console.log(`Listening on port ${port}`));
 }
 

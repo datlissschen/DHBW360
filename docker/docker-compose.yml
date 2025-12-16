@@ -2,24 +2,40 @@ name: dhbw360
 services:
   frontend:
     build:
-      context: ../frontend/
-      dockerfile: ../frontend/Dockerfile
+      context: ./frontend/
+      dockerfile: ./Dockerfile
     ports:
-      - 4205:4000
+      - 4000:4000
     volumes:
-      - ../frontend/dist/:/dhbw360/app/dist
+      - ./frontend/dist/:/dhbw360/app/dist
     networks:
+      - campus-app
       - dhbw360
   game-service:
-      build:
-        context: ../backend/
-        dockerfile: ../backend/game-service/Dockerfile
-      ports:
-        - 8085:8080
-      volumes:
-        - ../backend/game-service/dist/:/dhbw360/app/dist
-        - ../backend/game-service/.env:/dhbw360/app/.env
-      networks:
-        - dhbw360
+    build:
+      context: ./backend/
+      dockerfile: ./game-service/Dockerfile
+    ports:
+      - 8081:8081
+    volumes:
+      - ./backend/game-service/dist/:/dhbw360/app/dist
+      - ./backend/game-service/.env:/dhbw360/app/.env
+    networks:
+      - campus-app
+      - dhbw360
+  score-service:
+    build:
+      context: ./backend/
+      dockerfile: ./score-service/Dockerfile
+    ports:
+      - 8082:8082
+    volumes:
+      - ./backend/score-service/dist/:/dhbw360/app/dist
+      - ./backend/score-service/.env:/dhbw360/app/.env
+    networks:
+      - campus-app
+      - dhbw360
 networks:
   dhbw360:
+  campus-app:
+    external: true

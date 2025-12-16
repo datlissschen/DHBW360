@@ -15,10 +15,9 @@ export async function initDatabase() {
         console.error('Unexpected error on idle client', err)
         process.exit(-1)
     })
-    await executeDBQuery('CREATE TABLE IF NOT EXISTS rooms(' +
-            'room_id CHAR(16) PRIMARY KEY,' +
-            'location_id CHAR(16),' +
-            'floor_number integer' +
+    await executeDBQuery('CREATE TABLE IF NOT EXISTS scores(' +
+            'user_id CHAR(32) PRIMARY KEY,' +
+            'score CHAR(16)' +
             ')')
 }
 
