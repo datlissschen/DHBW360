@@ -3,6 +3,17 @@ import {executeDBQuery} from "@/database";
 
 const scoreCache = new NodeCache();
 
+export async function getTopScores(min: number, max: number) {
+    const limit = max - min + 1;
+    const offset = min - 1;
+
+    const result = await executeDBQuery(
+        "SELECT * FROM scores ORDER BY score DESC LIMIT $1 OFFSET $2",
+        [limit, offset]
+    );
+    return result.rows;
+}
+
 export async function getUserScore(userId: any) {
     if (scoreCache.has(userId)) {
         return scoreCache.get(userId);

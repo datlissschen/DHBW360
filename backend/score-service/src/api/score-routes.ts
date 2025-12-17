@@ -1,8 +1,15 @@
 import express, {Router} from "express";
-import {getUserScore, setUserScore} from "@/score-manager";
+import {getTopScores, getUserScore, setUserScore} from "@/score-manager";
 import {StatusCodes} from "http-status-codes";
 
 const scoreRouter = Router();
+
+scoreRouter.get('/top', async (req: express.Request, res: express.Response) => {
+    const min = Number(req.query.min);
+    const max = Number(req.query.max);
+    let topScores = await getTopScores(min, max);
+    res.json({'topScores': topScores});
+});
 
 scoreRouter.get('/get/:userId', async (req: express.Request, res: express.Response) => {
     const userId = req.params.userId;

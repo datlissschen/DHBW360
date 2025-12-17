@@ -12,13 +12,13 @@
   --text-strong: #1a1a1a;
 
   /* DHBW Farben */
-  --primary-color: #E60028;
+  --primary-color: #930010;
   --link-highlight: #d3072a;
   --button-hover: #b00521;
 
-  --podium-1: #E60028;
-  --podium-2: #808080;
-  --podium-3: #a0a0a0;
+  --podium-1: #C30012;
+  --podium-2: #5E5E5E;
+  --podium-3: #999999;
 
   /* Ränder und Schatten */
   --border-light: #e0e0e0;
@@ -26,113 +26,6 @@
   --border-radius: 8px;
 }
 
-
-
-[data-theme='light'] {
-  --text-medium: #777777;
-  --text-light: #FFFFFF;
-  --bg-light: #FFFFFF;
-  --border-radius: 12px;
-  --background-main: #F0F6FB;
-  --background-card: #FFF;
-  --input-background: #FFF;
-  --border-color: #DCDFE3;
-  --border-color2: #606060;
-  --text-hover: #FCAA46;
-  --popup-bg-color: rgba(0, 0, 0, 0.6);
-  --popup-content-bg: var(--bg-dark);
-  --step-bg: var(--bg-light);
-  --popup-border-radius: 20px;
-  --bg-dark: #f4f7fa;
-  --bg-light: #ffffff;
-  --text-dark: #4a4a4a;
-  --text-light: #ffffff;
-  --text-strong: #1a1a1a;
-  --primary-color: #E60028; /* DHBW Rot */
-  --link-highlight: #d3072a;
-  --button-hover: #b00521;
-  --podium-1: #ffd700; /* Gold */
-  --podium-2: #c0c0c0; /* Silber */
-  --podium-3: #cd7f32; /* Bronze */
-  --border-light: #eeeeee;
-  --shadow: 0 4px 12px rgba(0,0,0,0.05);
-  --border-radius: 12px;
-
-  --text-primary: #2C3E50;
-  --text-secondary: #666;
-  --placeholder-color: #999;
-
-  --button-yellow: #FCAA46;
-  --button-yellow-hover: #EFB80B;
-  --button-yellow-text: #FFF;
-
-  --button-green: #27AE60;
-  --button-green-hover: #219150;
-  --button-green-text: #FFF;
-
-  --button-red: #E74C3C;
-  --button-red-hover: #C0392B;
-  --button-red-text: #FFF;
-
-  --button-blue: #2B6D74;
-  --button-blue-hover: #22565C;
-  --button-blue-text: #FFF;
-
-  --nav-background: #FFF;
-  --nav-text: #2C3E50;
-  --shadow-card: 0 2px 8px rgb(0 0 0 / 0.05);
-}
-
-[data-theme='dark'] {
-  --bg-dark: #f4f7fa;
-  --bg-light: #ffffff;
-  --text-dark: #4a4a4a;
-  --text-light: #ffffff;
-  --text-strong: #1a1a1a;
-  --primary-color: #E60028; /* DHBW Rot */
-  --link-highlight: #d3072a;
-  --button-hover: #b00521;
-  --podium-1: #ffd700; /* Gold */
-  --podium-2: #c0c0c0; /* Silber */
-  --podium-3: #cd7f32; /* Bronze */
-  --border-light: #eeeeee;
-  --shadow: 0 4px 12px rgba(0,0,0,0.05);
-  --border-radius: 12px;
-  --background-main: #1E1E2F;
-  --background-card: #2A2A3B;
-  --input-background: #1B1B28;
-  --border-color: #3B3F4A;
-  --border-color2: #606060;
-  --text-hover: #FFD700;
-  --popup-bg-color: rgba(0, 0, 0, 0.6);
-  --popup-content-bg: var(--bg-dark);
-  --step-bg: var(--bg-light);
-  --popup-border-radius: 20px;
-
-  --text-primary: #F0F0F5;
-  --text-secondary: #A0A3B1;
-  --placeholder-color: #7A7A8B;
-
-  --button-yellow: #FCAA46;
-  --button-yellow-hover: #D6A300;
-  --button-yellow-text: #FFF;
-
-  --button-green: #27AE60;
-  --button-green-hover: #219150;
-  --button-green-text: #FFF;
-
-  --button-red: #E74C3C;
-  --button-red-hover: #C0392B;
-  --button-red-text: #FFF;
-
-  --button-blue: #2B6D74;
-  --button-blue-hover: #22565C;
-  --button-blue-text: #FFF;
-
-  --nav-background: #15151E;
-  --nav-text: #DBE0EC;
-  --shadow-card: 0 2px 6px rgb(0 0 0 / 0.4);
-}
 
 body {
   font-family: Inter, sans-serif; /* 'sans-serif' ist ein Fallback */

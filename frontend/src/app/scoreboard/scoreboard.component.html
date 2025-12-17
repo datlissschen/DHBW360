@@ -3,49 +3,47 @@
 
   <div class="top-3-players">
     <div class="player-podium-card rank-2">
-      <span class="rank-number">2</span>
-      <div class="user-info">
-        <div class="name">Benutzer 1</div>
-        <div>1234 Punkte</div>
-      </div>
+      <ng-container
+        *ngTemplateOutlet="pedestal_item; context: { rank: 2 }">
+      </ng-container>
     </div>
     <div class="player-podium-card rank-1">
-      <span class="rank-number">1</span>
-      <div class="user-info">
-        <div class="name">Benutzer 1</div>
-        <div>3000 Punkte</div>
-      </div>
+      <ng-container
+        *ngTemplateOutlet="pedestal_item; context: { rank: 1 }">
+      </ng-container>
     </div>
     <div class="player-podium-card rank-3">
-      <span class="rank-number">3</span>
-      <div class="user-info">
-        <div class="name">Benutzer 3</div>
-        <div>1000 Punkte</div>
-      </div>
+      <ng-container
+        *ngTemplateOutlet="pedestal_item; context: { rank: 3 }">
+      </ng-container>
     </div>
-  </div>
 
+    <ng-template #pedestal_item let-rank="rank">
+      @if (!top3[rank-1]) {
+        <span class="rank-number">{{ rank }}</span>
+        <div class="name">Noch nicht belegt</div>
+        <div></div>
+      }
+      @else {
+        <span class="rank-number">{{ rank }}</span>
+        <div class="name">{{ top3[rank-1].user_id }}</div>
+        <div>{{ top3[rank-1].score }} Punkte</div>
+      }
+    </ng-template>
+  </div>
   <div class="player-table-container">
     <table class="player-table">
       <thead>
       <tr>
+        <th>Rang</th>
         <th>Spieler</th>
         <th>Punkte</th>
       </tr>
       </thead>
       <tbody>
-      <tr><td>Spieler 4</td><td>900 Punkte</td></tr>
-      <tr><td>Spieler 5</td><td>800 Punkte</td></tr>
-      <tr><td>Spieler 6</td><td>700 Punkte</td></tr>
-      <tr><td>Spieler 7</td><td>600 Punkte</td></tr>
-      <tr><td>Spieler 8</td><td>500 Punkte</td></tr>
-      <tr><td>Spieler 9</td><td>400 Punkte</td></tr>
-      <tr><td>Spieler 10</td><td>100 Punkte</td></tr>
-      <tr><td>Spieler 11</td><td>90 Punkte</td></tr>
-      <tr><td>Spieler 12</td><td>80 Punkte</td></tr>
-      <tr><td>Spieler 13</td><td>70 Punkte</td></tr>
-      <tr><td>Spieler 14</td><td>60 Punkte</td></tr>
-      <tr><td>Spieler 15</td><td>50 Punkte</td></tr>
+      @for (entry of top4to10; track entry.user_id; let i = $index) {
+        <tr><td>#{{i+4}}</td><td>Spieler {{entry.user_id}}</td><td>{{ entry.score }} Punkte</td></tr>
+      }
       </tbody>
     </table>
   </div>
