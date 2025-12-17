@@ -39,7 +39,7 @@
 }
 
 .header .logo-container .logo-image {
-  height: 60px; /* Kleineres Logo wie im Bild */
+  height: 80px; /* Kleineres Logo wie im Bild */
   object-fit: contain;
 }
 
@@ -91,7 +91,7 @@
 }
 
 .header input[type="number"] {
-  width: 50px;
+  width: 80px;
   padding: 0.5rem 0.7rem;
   border: 1px solid var(--border-light);
   border-radius: var(--border-radius);

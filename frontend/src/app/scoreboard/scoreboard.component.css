@@ -13,7 +13,6 @@ h1 {
   color: var(--text-strong);
   text-align: center;
   margin-top: 0;
-  margin-bottom: 2.5rem;
 }
 
 /* --- Top 3 Spieler (Podium) --- */
@@ -38,28 +37,27 @@ h1 {
   transition: all 0.3s ease;
   position: relative;
   color: var(--text-light);
-  font-size: 0.9rem;
 }
 
 /* Farben kommen jetzt aus :root in styles.css */
 .player-podium-card.rank-1 {
   background-color: var(--podium-1);
   height: 100%;
-  width: 150px;
+  width: 200px;
 }
 .player-podium-card.rank-2 {
   background-color: var(--podium-2);
   height: 80%;
-  width: 130px;
+  width: 160px;
 }
 .player-podium-card.rank-3 {
   background-color: var(--podium-3);
   height: 60%;
-  width: 130px;
+  width: 160px;
 }
 
 .player-podium-card .rank-number {
-  font-size: 3rem;
+  font-size: 3.5rem;
   font-weight: 700;
   line-height: 1;
   margin-bottom: 0.4rem;
@@ -67,12 +65,10 @@ h1 {
 }
 
 .player-podium-card .user-info {
-  font-size: 0.85rem;
   font-weight: 500; /* Dünnere Schrift */
   text-shadow: none; /* Kein Textschatten laut Bild */
 }
 .player-podium-card .user-info .name {
-  font-size: 1rem;
   margin-bottom: 0.1rem;
   word-break: break-word;
 }

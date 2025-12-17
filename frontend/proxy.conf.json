@@ -1,0 +1,20 @@
+{
+	"/api/game-service": {
+		"target": "http://localhost:8081",
+		"secure": false,
+		"changeOrigin": true,
+		"logLevel": "debug",
+		"pathRewrite": {
+			"^/api/game-service": ""
+		}
+	},
+  "/api/score-service": {
+    "target": "http://localhost:8082",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/score-service": ""
+    }
+  }
+}
