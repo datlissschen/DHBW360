@@ -24,6 +24,9 @@
   --border-light: #e0e0e0;
   --shadow: 0 2px 10px rgba(0,0,0,0.08); /* Sanfterer Schatten */
   --border-radius: 8px;
+
+  --popup-bg-color: rgba(0, 0, 0, 0.6);
+  --popup-content-bg: var(--bg-dark);
 }
 
 

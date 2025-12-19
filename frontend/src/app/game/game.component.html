@@ -2,14 +2,14 @@
 
 <div class="ui-overlay">
   <div class="header-logo">
-    <img src="assets/dhbw360_logo.png" alt="DHBW360 LogoComponent">
+    <img src="dhbw360_logo_circle.png" alt="DHBW360 LogoComponent">
   </div>
 
   <div class="game-info">
-    <div class="round-display">Runde X / Y</div>
+    <div class="round-display">Runde {{ currentRound }} / {{ maxRounds }}</div>
     <div class="score-display">
       <span>Punkte</span>
-      <span class="points">1234</span>
+      <span class="points">{{ cumulativeScore }}</span>
     </div>
   </div>
 

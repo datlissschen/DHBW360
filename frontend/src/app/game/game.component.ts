@@ -1,11 +1,29 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, ChangeDetectionStrategy, HostListener, inject } from '@angular/core';
+import {
+  Component, AfterViewInit, ViewChild, ElementRef, ChangeDetectionStrategy, HostListener,
+  ChangeDetectorRef
+} from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { GeoJSON } from 'leaflet';
+
+interface IGameStartResponse {
+  game: IGame;
+}
+
+interface IGame {
+  rounds: {
+    roomImgURL: string;
+    score: number;
+  }[],
+  currentRoundNumber: number;
+  maxRounds: number;
+}
 
 declare var pannellum: any;
 declare var L: any;
-//import { RouterLink } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs/operators';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-game',
@@ -15,41 +33,38 @@ import { CommonModule } from '@angular/common';
   styleUrl: './game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameViewComponent implements AfterViewInit {
-  private route = inject(ActivatedRoute);
+export class GameComponent implements AfterViewInit {
 
-  // Routen-Parameter auslesen (z.B. /game?rounds=5)
-  public rounds$ = this.route.queryParamMap.pipe(
-    map(params => params.get('rounds') || '1')
-  );
+  currentRound: number = 1;
+  maxRounds: number = 1;
+  cumulativeScore: number = 0;
 
-  // Referenzen auf HTML-Elemente
   @ViewChild('panorama') panoramaEl!: ElementRef;
   @ViewChild('popupOverlay') popupOverlayEl!: ElementRef;
   @ViewChild('mapWorld') mapWorldEl!: ElementRef;
   @ViewChild('mapFloor') mapFloorEl!: ElementRef;
   @ViewChild('mapRoom') mapRoomEl!: ElementRef;
 
-  // Referenzen auf Step-Elemente
   @ViewChild('step1') step1El!: ElementRef<HTMLDetailsElement>;
   @ViewChild('step2') step2El!: ElementRef<HTMLDetailsElement>;
   @ViewChild('step3') step3El!: ElementRef<HTMLDetailsElement>;
 
-  // Referenzen auf Status-Elemente
   @ViewChild('status1') status1El!: ElementRef<HTMLElement>;
   @ViewChild('status2') status2El!: ElementRef<HTMLElement>;
   @ViewChild('status3') status3El!: ElementRef<HTMLElement>;
 
-  // Component-Eigenschaften für die Logik
   private viewer: any;
   private worldMap: any;
   private floorMap: any;
   private roomMap: any;
 
   private selectedLocation: string | null = null;
+  private selectedLocationId: string | null = null;
   private selectedFloor: string | null = null;
   private selectedRoom: string | null = null;
 
+  private floorImageLayer?: any;
+  private floorGeoLayer?: any;
   private lastFloorLayer: any = null;
   private lastRoomLayer: any = null;
 
@@ -60,22 +75,43 @@ export class GameViewComponent implements AfterViewInit {
   private highlightStyle: any;
   private defaultStyle: any;
 
-  // ngAfterViewInit wird ausgeführt, nachdem die HTML-Ansicht geladen wurde
-  // (ersetzt DOMContentLoaded)
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private cdRef: ChangeDetectorRef
+  ) {}
+
   ngAfterViewInit(): void {
-    this.initPannellum();
     this.initMapStyles();
     this.initMapLogic();
+    this.requestGameResources();
   }
 
-  // ------------------------------------------
-  // TEIL 1: 360° SPIEL-ANSICHT (PANNELLUM)
-  // ------------------------------------------
+  private requestGameResources(): void {
+    this.route.queryParamMap.pipe(
+      map(params => Number(params.get('rounds')) || 1)
+    ).subscribe(rounds => {
+      this.http.post<IGameStartResponse>(`${environment.gameServiceBaseUrl}/game/start-game`, {
+        rounds: rounds
+      }).subscribe({
+        next: data => {
+          this.currentRound = data.game.currentRoundNumber;
+          this.maxRounds = data.game.maxRounds;
+          this.initPannellum(data.game.rounds[0].roomImgURL);
+          this.cdRef.markForCheck();
+        },
+        error: err => console.error(err)
+      });
+    });
+  }
 
-  private initPannellum(): void {
+  private initPannellum(roomImageUrl: string): void {
+    if (this.viewer) {
+      this.viewer.destroy();
+    }
     this.viewer = pannellum.viewer(this.panoramaEl.nativeElement, {
       "type": "equirectangular",
-      "panorama": "assets/raum.jpg", // Bild aus dem 'assets'-Ordner laden
+      "panorama": `${environment.gameServiceBaseUrl}/${roomImageUrl}`,
       "autoLoad": true,
       "showControls": false,
       "draggable": true,
@@ -91,28 +127,22 @@ export class GameViewComponent implements AfterViewInit {
     });
   }
 
-  // Click-Handler für die Navigations-Buttons
   onNavUp(): void { this.viewer.setPitch(this.viewer.getPitch() + 50); }
   onNavDown(): void { this.viewer.setPitch(this.viewer.getPitch() - 50); }
   onNavLeft(): void { this.viewer.setYaw(this.viewer.getYaw() - 50); }
   onNavRight(): void { this.viewer.setYaw(this.viewer.getYaw() + 50); }
 
-  // Tastatur-Steuerung für die Navigation
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(e: KeyboardEvent): void {
-    if (e.key === 'ArrowUp') this.viewer.setPitch(this.viewer.getPitch() + 50);
-    else if (e.key === 'ArrowDown') this.viewer.setPitch(this.viewer.getPitch() - 50);
-    else if (e.key === 'ArrowLeft') this.viewer.setYaw(this.viewer.getYaw() - 50);
-    else if (e.key === 'ArrowRight') this.viewer.setYaw(this.viewer.getYaw() + 50);
+    if (e.key === 'ArrowUp') this.onNavUp();
+    else if (e.key === 'ArrowDown') this.onNavDown();
+    else if (e.key === 'ArrowLeft') this.onNavLeft();
+    else if (e.key === 'ArrowRight') this.onNavRight();
   }
-
-  // ------------------------------------------
-  // TEIL 2: POPUP-LOGIK (LEAFLET)
-  // ------------------------------------------
 
   onOpenPopup(): void {
     this.popupOverlayEl.nativeElement.style.display = 'flex';
-    this.initWorldMap(); // Weltkarte initialisieren/neu laden, wenn Popup geöffnet wird
+    setTimeout(() => this.initWorldMap(), 10);
   }
 
   onClosePopup(): void {
@@ -124,15 +154,56 @@ export class GameViewComponent implements AfterViewInit {
       alert('Bitte wählen Sie alle drei Schritte aus.');
       return;
     }
-    alert(`Auswahl:\nStandort: ${this.selectedLocation}\nEtage: ${this.selectedFloor}\nRaum: ${this.selectedRoom}`);
+
+    this.http.post<{correctAnswer: boolean, gameEnd: boolean, game: IGame}>(`${environment.gameServiceBaseUrl}/game/check-answer`, {
+      selectedLocationId: this.selectedLocationId,
+      selectedFloorId: this.selectedFloor,
+      selectedRoomId: this.selectedRoom,
+    }).subscribe({
+      next: data => {
+        alert(data.correctAnswer ? "Korrekt!" : "Falsch!");
+
+        if (data.gameEnd) {
+          alert("Spielende!");
+        } else {
+          this.currentRound = data.game.currentRoundNumber;
+          this.cumulativeScore += data.game.rounds[data.game.currentRoundNumber - 2].score;
+          this.initPannellum(data.game.rounds[data.game.currentRoundNumber - 1].roomImgURL);
+          this.resetGameState();
+          this.cdRef.markForCheck();
+        }
+      },
+      error: err => console.error(err)
+    });
     this.onClosePopup();
   }
 
-  // --- Initialisierungs-Logik für Karten ---
+  private resetGameState(): void {
+    this.selectedLocation = null;
+    this.selectedLocationId = null;
+    this.selectedFloor = null;
+    this.selectedRoom = null;
+    this.lastFloorLayer = null;
+    this.lastRoomLayer = null;
+
+    if (this.worldMap) { this.worldMap.remove(); this.worldMap = null; }
+    if (this.floorMap) { this.floorMap.remove(); this.floorMap = null; }
+    if (this.roomMap) { this.roomMap.remove(); this.roomMap = null; }
+
+    this.updateStepStatus(this.status1El.nativeElement, 'Nicht ausgewählt', false);
+    this.updateStepStatus(this.status2El.nativeElement, 'Nicht ausgewählt', false);
+    this.updateStepStatus(this.status3El.nativeElement, 'Nicht ausgewählt', false);
+
+    this.step1El.nativeElement.open = true;
+    this.step2El.nativeElement.open = false;
+    this.step2El.nativeElement.classList.add('disabled');
+    this.step3El.nativeElement.open = false;
+    this.step3El.nativeElement.classList.add('disabled');
+  }
 
   private initMapStyles(): void {
-    this.osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' });
-    this.satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, attribution: 'Tiles &copy; Esri' });
+    this.osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
+    this.satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
 
     this.defaultIcon = L.icon({
       iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -150,54 +221,27 @@ export class GameViewComponent implements AfterViewInit {
   }
 
   private initMapLogic(): void {
-    // Event Listeners für Akkordeon-Schritte
     [this.step1El, this.step2El, this.step3El].forEach(elRef => {
       elRef.nativeElement.addEventListener('toggle', (event) => {
         const step = event.target as HTMLDetailsElement;
-
         if (step.classList.contains('disabled') && step.open) {
           step.open = false;
           return;
         }
-
         if (step.open) {
-          // Alle anderen Schritte schließen
-          [this.step1El, this.step2El, this.step3El].forEach(otherElRef => {
-            if (otherElRef.nativeElement !== step && otherElRef.nativeElement.open) {
-              otherElRef.nativeElement.open = false;
-            }
+          [this.step1El, this.step2El, this.step3El].forEach(other => {
+            if (other.nativeElement !== step) other.nativeElement.open = false;
           });
-
-          // Karten initialisieren ODER Größe anpassen, wenn der Schritt geöffnet wird
           const mapId = step.querySelector('.map-container')?.id;
-          if (mapId) {
-            setTimeout(() => {
-              if (mapId === 'map-world') this.initWorldMap();
-              if (mapId === 'map-floor') this.initFloorMap();
-              if (mapId === 'map-room') this.initRoomMap();
-            }, 50); // 50ms Verzögerung gibt dem Akkordeon Zeit, sich zu öffnen
-          }
+          setTimeout(() => {
+            if (mapId === 'map-world') this.initWorldMap();
+            if (mapId === 'map-floor') this.initFloorMap();
+            if (mapId === 'map-room') this.initRoomMap();
+          }, 50);
         }
       });
     });
-
-    // Event Listeners für Karten-Buttons (Weltkarte)
-    document.querySelectorAll('.map-type-button[data-map="world"]').forEach(button => {
-      button.addEventListener('click', (e) => {
-        const target = e.target as HTMLButtonElement;
-        document.querySelectorAll('.map-type-button[data-map="world"]').forEach(btn => btn.classList.remove('active'));
-        target.classList.add('active');
-
-        this.worldMap.removeLayer(this.osmLayer);
-        this.worldMap.removeLayer(this.satelliteLayer);
-
-        if (target.dataset['type'] === 'karte') this.osmLayer.addTo(this.worldMap);
-        else this.satelliteLayer.addTo(this.worldMap);
-      });
-    });
   }
-
-  // --- Einzelne Karten-Funktionen ---
 
   private initWorldMap(): void {
     if (this.worldMap) {
@@ -208,120 +252,107 @@ export class GameViewComponent implements AfterViewInit {
     this.osmLayer.addTo(this.worldMap);
 
     const locations = [
-      { name: "DHBW Stuttgart", lat: 48.7840, lon: 9.1738 },
-      { name: "Hauptbahnhof", lat: 48.7842, lon: 9.1818 },
-      { name: "Milaneo", lat: 48.7895, lon: 9.1852 },
-      { name: "Schlossplatz", lat: 48.7781, lon: 9.1795 },
+      { name: "DHBW Stuttgart", id: "LE1", lat: 48.7840, lon: 9.1738 },
+      { name: "Hauptbahnhof", id: "LE2", lat: 48.7842, lon: 9.1818 },
+      { name: "Milaneo", id: "LE3", lat: 48.7895, lon: 9.1852 },
+      { name: "Schlossplatz", id: "LE4", lat: 48.7781, lon: 9.1795 },
     ];
+
     let activeMarker: any = null;
     locations.forEach(loc => {
-      const marker = L.marker([loc.lat, loc.lon], { icon: this.defaultIcon }).addTo(this.worldMap).bindPopup(loc.name);
+      const marker = L.marker([loc.lat, loc.lon], { icon: this.defaultIcon }).addTo(this.worldMap);
       marker.on('click', () => {
         if (activeMarker) activeMarker.setIcon(this.defaultIcon);
         marker.setIcon(this.activeIcon);
         activeMarker = marker;
-
         this.selectedLocation = loc.name;
+        this.selectedLocationId = loc.id;
         this.updateStepStatus(this.status1El.nativeElement, `Ausgewählt: ${loc.name}`);
-
-        this.resetStep2();
-        this.resetStep3();
         this.step2El.nativeElement.classList.remove('disabled');
-        this.openNextStep(this.step2El.nativeElement);
+        this.step2El.nativeElement.open = true;
       });
     });
   }
 
   private initFloorMap(): void {
-    if (this.floorMap) {
-      this.floorMap.invalidateSize();
-      return;
+    if (!this.floorMap) {
+      this.floorMap = L.map(this.mapFloorEl.nativeElement, { crs: L.CRS.Simple, minZoom: -1 });
     }
-    this.floorMap = L.map(this.mapFloorEl.nativeElement, { crs: L.CRS.Simple, minZoom: -2 });
-    const w = 1000, h = 750;
-    const imageUrl = 'https://via.placeholder.com/1000x750/F5F5F5/777777?text=Beispiel-Grundriss+Gebaude';
-    const bounds = [[0,0], [h, w]];
-    L.imageOverlay(imageUrl, bounds).addTo(this.floorMap);
+    this.updateFloorSideview();
+  }
+
+  private updateFloorSideview(): void {
+    const imageWidth = 1000, imageHeight = 750, geoWidth = 801, geoHeight = 445;
+    const scaleX = imageWidth / geoWidth, scaleY = imageHeight / geoHeight;
+    const bounds: L.LatLngBoundsExpression = [[0, 0], [imageHeight, imageWidth]];
+
+    if (this.floorImageLayer) this.floorMap.removeLayer(this.floorImageLayer);
+    if (this.floorGeoLayer) this.floorMap.removeLayer(this.floorGeoLayer);
+
+    this.floorImageLayer = L.imageOverlay(`${environment.gameServiceBaseUrl}/img/sideview/${this.selectedLocationId}`, bounds).addTo(this.floorMap);
     this.floorMap.fitBounds(bounds);
 
-    const floorGeoJson = {
-      "type": "FeatureCollection", "features": [
-        { "type": "Feature", "properties": { "name": "Trakt A (EG)" }, "geometry": { "type": "Polygon", "coordinates": [[[50, 50], [450, 50], [450, 700], [50, 700], [50, 50]]] } },
-        { "type": "Feature", "properties": { "name": "Trakt B (EG)" }, "geometry": { "type": "Polygon", "coordinates": [[[500, 50], [950, 50], [950, 700], [500, 700], [500, 50]]] } }
-      ]
-    };
-    L.geoJSON(floorGeoJson, {
-      style: this.defaultStyle,
-      onEachFeature: (feature: any, layer: any) => {
-        layer.on('click', () => {
-          if (this.lastFloorLayer) this.lastFloorLayer.setStyle(this.defaultStyle);
-          layer.setStyle(this.highlightStyle);
-          this.lastFloorLayer = layer;
-          this.selectedFloor = feature.properties.name;
-          this.updateStepStatus(this.status2El.nativeElement, `Ausgewählt: ${this.selectedFloor}`);
-          this.resetStep3();
-          this.step3El.nativeElement.classList.remove('disabled');
-          this.openNextStep(this.step3El.nativeElement);
-        });
-      }
-    }).addTo(this.floorMap);
+    this.http.get(`${environment.gameServiceBaseUrl}/geo-data/sideview/${this.selectedLocationId}`).subscribe((geoJson) => {
+      this.floorGeoLayer = L.geoJSON(geoJson as any, {
+        coordsToLatLng: (coords: number[]) => L.latLng(imageHeight + coords[1] * scaleY, coords[0] * scaleX),
+        style: this.defaultStyle,
+        onEachFeature: (feature: any, layer: any) => {
+          layer.on('click', () => {
+            if (this.lastFloorLayer) this.lastFloorLayer.setStyle(this.defaultStyle);
+            layer.setStyle(this.highlightStyle);
+            this.lastFloorLayer = layer;
+            this.selectedFloor = feature.properties.floor_id;
+            this.updateStepStatus(this.status2El.nativeElement, `Ausgewählt: ${this.selectedFloor}`);
+            this.step3El.nativeElement.classList.remove('disabled');
+            this.step3El.nativeElement.open = true;
+          });
+        }
+      }).addTo(this.floorMap);
+    });
   }
 
   private initRoomMap(): void {
     if (this.roomMap) {
-      this.roomMap.invalidateSize();
-      return;
+      this.roomMap.remove();
+      this.roomMap = null;
     }
-    this.roomMap = L.map(this.mapRoomEl.nativeElement, { crs: L.CRS.Simple, minZoom: -2 });
-    const w = 1000, h = 750;
-    const imageUrl = 'https://via.placeholder.com/1000x750/F5F5F5/777777?text=Beispiel-Grundriss+Trakt+A';
-    const bounds = [[0,0], [h, w]];
-    L.imageOverlay(imageUrl, bounds).addTo(this.roomMap);
-    this.roomMap.fitBounds(bounds);
 
-    const roomGeoJson = {
-      "type": "FeatureCollection", "features": [
-        { "type": "Feature", "properties": { "name": "Raum A.101" }, "geometry": { "type": "Polygon", "coordinates": [[[50, 50], [300, 50], [300, 300], [50, 300], [50, 50]]] } },
-        { "type": "Feature", "properties": { "name": "Raum A.102" }, "geometry": { "type": "Polygon", "coordinates": [[[50, 350], [300, 350], [300, 700], [50, 700], [50, 350]]] } },
-        { "type": "Feature", "properties": { "name": "Flur" }, "geometry": { "type": "Polygon", "coordinates": [[[350, 50], [950, 50], [950, 700], [350, 700], [350, 50]]] } }
-      ]
-    };
-    L.geoJSON(roomGeoJson, {
-      style: this.defaultStyle,
-      onEachFeature: (feature: any, layer: any) => {
-        layer.on('click', () => {
-          if (this.lastRoomLayer) this.lastRoomLayer.setStyle(this.defaultStyle);
-          layer.setStyle(this.highlightStyle);
-          this.lastRoomLayer = layer;
-          this.selectedRoom = feature.properties.name;
-          this.updateStepStatus(this.status3El.nativeElement, `Ausgewählt: ${this.selectedRoom}`);
+    const imageUrl = `${environment.gameServiceBaseUrl}/img/floor/${this.selectedFloor}`;
+
+    const img = new Image();
+    img.src = imageUrl;
+    img.onload = () => {
+      const w = img.width;
+      const h = img.height;
+
+      this.roomMap = L.map(this.mapRoomEl.nativeElement, {
+        crs: L.CRS.Simple,
+        minZoom: -2
+      });
+
+      const bounds: L.LatLngBoundsExpression = [[0, 0], [h, w]];
+      L.imageOverlay(imageUrl, bounds).addTo(this.roomMap);
+      this.roomMap.fitBounds(bounds);
+
+      this.http.get(`${environment.gameServiceBaseUrl}/geo-data/floor/${this.selectedFloor}`)
+        .subscribe((geoJson) => {
+          L.geoJSON(geoJson as any, {
+            coordsToLatLng: (coords: number[]) => {
+              return L.latLng(h + coords[1], coords[0]);
+            },
+            style: this.defaultStyle,
+            onEachFeature: (feature: any, layer: any) => {
+              layer.on('click', () => {
+                if (this.lastRoomLayer) this.lastRoomLayer.setStyle(this.defaultStyle);
+                layer.setStyle(this.highlightStyle);
+                this.lastRoomLayer = layer;
+                this.selectedRoom = feature.properties.room_id;
+                this.updateStepStatus(this.status3El.nativeElement, `Ausgewählt: ${this.selectedRoom}`);
+              });
+            }
+          }).addTo(this.roomMap);
         });
-      }
-    }).addTo(this.roomMap);
-  }
-
-  // --- Hilfsfunktionen für die Schritt-Logik ---
-
-  private resetStep2(): void {
-    this.selectedFloor = null;
-    this.updateStepStatus(this.status2El.nativeElement, 'Nicht ausgewählt', false);
-    this.step2El.nativeElement.classList.add('disabled');
-    this.step2El.nativeElement.open = false;
-    if (this.lastFloorLayer) {
-      this.lastFloorLayer.setStyle(this.defaultStyle);
-      this.lastFloorLayer = null;
-    }
-  }
-
-  private resetStep3(): void {
-    this.selectedRoom = null;
-    this.updateStepStatus(this.status3El.nativeElement, 'Nicht ausgewählt', false);
-    this.step3El.nativeElement.classList.add('disabled');
-    this.step3El.nativeElement.open = false;
-    if (this.lastRoomLayer) {
-      this.lastRoomLayer.setStyle(this.defaultStyle);
-      this.lastRoomLayer = null;
-    }
+    };
   }
 
   private updateStepStatus(element: HTMLElement, text: string, addClass = true): void {
@@ -329,11 +360,4 @@ export class GameViewComponent implements AfterViewInit {
     if (addClass) element.classList.add('selected');
     else element.classList.remove('selected');
   }
-
-  private openNextStep(stepElement: HTMLDetailsElement): void {
-    if (stepElement) stepElement.open = true;
-  }
-}
-
-export class GameComponent {
 }

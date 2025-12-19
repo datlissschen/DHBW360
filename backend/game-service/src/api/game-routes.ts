@@ -1,14 +1,25 @@
 import express, {Router} from "express";
-import {calculateScore, checkAnswer, Game, getGameByUserId, saveGame, startGame, stopGame} from "@/game-manager";
+import {
+    addScore,
+    calculateScore,
+    checkAnswer,
+    Game,
+    getGameByUser,
+    saveGame,
+    startGame,
+    stopGame
+} from "@/game-manager";
 import {StatusCodes} from 'http-status-codes';
 
 const gameRouter = Router();
 
 gameRouter.post('/start-game', async (req: express.Request, res: express.Response) => {
+    if (!req.body.rounds) res.status(StatusCodes.BAD_REQUEST).json({error: 'Attribute "rounds" not found in request body'});
     const rounds = Number(req.body.rounds);
-    const userId: string = req.body.userId ?? crypto.randomUUID();
-    const game = await startGame(rounds, userId);
-    res.send({userId: userId, game: game});
+    const username: string = req.body.username ?? crypto.randomUUID();
+    const game = await startGame(rounds, username);
+    req.session.username = username;
+    res.send({username: username, game: game});
 })
 
 gameRouter.get('/test/correct-answer', async (req: express.Request, res: express.Response) => {
@@ -18,8 +29,8 @@ gameRouter.get('/test/correct-answer', async (req: express.Request, res: express
         });
         return;
     }
-    const userId = req.body.userId
-    const game = getGameByUserId(userId)!;
+    const username = req.session.username!;
+    const game = getGameByUser(username)!;
     const room = game.rounds[game.currentRoundNumber-1].room
     const correctAnswer = {
         locationId: room.locationId,
@@ -41,38 +52,40 @@ gameRouter.post('/check-answer', async (req: express.Request, res: express.Respo
     }
     const data = checkRequest(req, res)
     if (!data) { return }
-    const userId = data[0]
+    const username = data[0]
     const game = data[1]
     const correctAnswer = checkAnswer(game, selectedLocationId, selectedFloorId, selectedRoomId);
-    const correctRoom = game.rounds[game.currentRoundNumber].room;
+    const correctRoom = game.rounds[game.currentRoundNumber-1].room;
     const roundScore = calculateScore(correctRoom, selectedLocationId, selectedFloorId, selectedRoomId);
-    game.rounds[game.currentRoundNumber].score = roundScore;
-    saveGame(userId, game);
-    const {rounds, ...gameWithoutRounds} = game;
-    gameWithoutRounds.currentRoundNumber++
-    res.json({correctAnswer: correctAnswer, gameEnd: game.currentRoundNumber == game.maxRounds, game: gameWithoutRounds});
+    game.rounds[game.currentRoundNumber-1].score = roundScore;
+    saveGame(username, game);
+    //const {rounds, ...gameWithoutRounds} = game;
+    //gameWithoutRounds.currentRoundNumber++
+    game.currentRoundNumber++;
+    res.json({correctAnswer: correctAnswer, gameEnd: game.currentRoundNumber-1 == game.maxRounds, game: game});
     if (game.currentRoundNumber == game.maxRounds) {
-        stopGame(userId)
+        stopGame(username)
     } else {
         game.currentRoundNumber++;
-        saveGame(userId, game)
+        saveGame(username, game);
+        addScore(username, roundScore);
     }
 })
 
-function checkRequest(req: express.Request, res: express.Response): [any, Game] | undefined {
-    const userId = req.body.userId;
-    if (!userId) {
+function checkRequest(req: express.Request, res: express.Response): [string, Game] | undefined {
+    const username = req.session.username;
+    if (!username) {
         res.sendStatus(StatusCodes.UNAUTHORIZED);
         return undefined;
     }
-    const game = getGameByUserId(userId)
+    const game = getGameByUser(username)
     if (!game) {
         res.status(StatusCodes.NOT_FOUND).json({
             error: "No game found with given user id"
         });
         return undefined;
     }
-    return [userId, game];
+    return [username, game];
 }
 
 export default gameRouter;
