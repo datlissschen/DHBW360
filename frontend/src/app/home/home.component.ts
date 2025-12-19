@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ScoreboardComponent } from '../scoreboard/scoreboard.component';
 import { FormsModule } from '@angular/forms';
 import {faCircleInfo} from '@fortawesome/free-solid-svg-icons';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {ScoreboardComponent} from '../scoreboard/scoreboard.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ScoreboardComponent, FormsModule, FaIconComponent],
+  imports: [FormsModule, FaIconComponent, ScoreboardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

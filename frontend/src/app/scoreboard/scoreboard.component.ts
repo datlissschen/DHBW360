@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy, OnInit} from '@angular/core';
+import {Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {NgTemplateOutlet} from '@angular/common';
@@ -23,7 +23,7 @@ export class ScoreboardComponent implements OnInit {
   top3: IScoreEntry[] = [];
   top4to10: IScoreEntry[] = [];
 
-  constructor(private http: HttpClient)  { }
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef)  { }
 
   ngOnInit() {
     this.http.get<{topScores: IScoreEntry[]}>(`${environment.scoreServiceBaseUrl}/score/top`, {
@@ -34,9 +34,9 @@ export class ScoreboardComponent implements OnInit {
     }).subscribe({
       next: data => {
         const scores = data.topScores;
-        console.log(scores);
         this.top3 = scores.slice(0, 3);       // Rang 1–3
         this.top4to10 = scores.slice(3, 10);  // Rang 4–10
+        this.cdr.markForCheck();
       },
       error: err => {
         console.log(err);

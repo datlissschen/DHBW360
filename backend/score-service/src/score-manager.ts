@@ -14,35 +14,36 @@ export async function getTopScores(min: number, max: number) {
     return result.rows;
 }
 
-export async function getUserScore(userId: any) {
-    if (scoreCache.has(userId)) {
-        return scoreCache.get(userId);
+export async function getUserScore(username: string) {
+    if (scoreCache.has(username)) {
+        return scoreCache.get(username);
     }
     try {
-        const result = await executeDBQuery("SELECT score FROM scores WHERE user_id = $1", [userId]);
+        const result = await executeDBQuery("SELECT score FROM scores WHERE username = $1", [username]);
         let score = undefined;
         if (result.rows.length > 0) {
             score = result.rows[0].score;
         }
-        scoreCache.set(userId, score);
+        scoreCache.set(username, score);
         return score;
     } catch (err) {
-        console.error(`Error while loading score for user ${userId}:`, err);
+        console.error(`Error while loading score for user ${username}:`, err);
         return undefined;
     }
 }
 
-export async function setUserScore(userId: any, score: number) {
+export async function addUserScore(username: string, score: number) {
     try {
         await executeDBQuery(
-                "INSERT INTO scores (user_id, score) VALUES ($1, $2) ON CONFLICT (user_id) DO UPDATE SET score = $2",
-                [userId, score]
+                "INSERT INTO scores (username, score) VALUES ($1, $2) ON CONFLICT (username) DO UPDATE SET score = scores.score + EXCLUDED.score",
+                [username, score]
         );
-        scoreCache.set(userId, score);
+        const currentCached: number = scoreCache.get(username) || 0;
+        scoreCache.set(username, currentCached + score);
         return true;
     } catch (error) {
-        console.error(`Error while saving score for user ${userId}:`, error);
-        scoreCache.del(userId);
+        console.error(`Error while saving score for user ${username}:`, error);
+        scoreCache.del(username);
         return false;
     }
 }
