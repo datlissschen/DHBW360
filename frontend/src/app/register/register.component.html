@@ -1,0 +1,38 @@
+<div class="auth-container">
+  <h2>Account erstellen</h2>
+  <p class="subtitle">Registriere dich um in der Bestenliste aufzutauchen!</p>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+    <div class="form-group">
+      <label for="reg-username">Benutzername</label>
+      <input
+        id="reg-username"
+        type="text"
+        formControlName="username"
+        placeholder="Wähle einen Benutzernamen"
+        [class.is-invalid]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+    </div>
+
+    <div class="form-group">
+      <label for="reg-password">Password</label>
+      <input
+        id="reg-password"
+        type="password"
+        formControlName="password"
+        placeholder="Wähle ein starkes Password"
+        [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+      <small *ngIf="registerForm.get('password')?.errors?.['minlength']" class="help-text">
+        Password must be at least 6 characters long.
+      </small>
+    </div>
+
+    <button type="submit" [disabled]="registerForm.invalid">
+      Account erstellen
+    </button>
+
+    <div class="footer-links">
+      <span>Du hast schon ein Account? </span>
+      <a routerLink="/login">Hier anmelden!</a>
+    </div>
+  </form>
+</div>

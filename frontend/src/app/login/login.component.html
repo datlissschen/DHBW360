@@ -1,0 +1,23 @@
+<div class="login-container">
+  <h2>Login</h2>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="Benutzername">Username</label>
+      <input id="Benutzername" type="text" formControlName="username" placeholder="Benutzername eingeben">
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" placeholder="Password eingeben">
+    </div>
+
+    <button type="submit" [disabled]="loginForm.invalid || isLoading">
+      {{ isLoading ? 'Logging in...' : 'Login' }}
+    </button>
+
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  </form>
+
+  <p>Du hast noch keinen Account? <a routerLink="/register">Registriere dich hier</a></p>
+</div>
