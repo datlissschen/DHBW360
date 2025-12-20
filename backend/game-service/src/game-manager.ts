@@ -51,6 +51,9 @@ export function stopGame(username: string) {
 export function addScore(username: string, amount: number) {
     fetch(`${process.env.SCORE_SERVICE_API as string}/score/add`, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
             authKey: process.env.AUTH_KEY,
             username: username,
