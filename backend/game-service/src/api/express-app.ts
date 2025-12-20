@@ -30,7 +30,7 @@ expressApp.use(session({
     saveUninitialized: false,
     proxy: true,
     cookie: {
-        secure: process.env.PRODUCTION == 'true',
+        secure: false,//process.env.PRODUCTION == 'true',
         httpOnly: true,
         sameSite: process.env.PRODUCTION == 'true' ? 'none' : undefined,
         domain: process.env.PRODUCTION == 'true' ? `.${process.env.DOMAIN}` : undefined,
