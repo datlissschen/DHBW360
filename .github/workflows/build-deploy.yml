@@ -6,6 +6,31 @@ on:
     workflow_dispatch:
 
 jobs:
+    automated-tests:
+        name: Game-Service Integration Tests
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: '21'
+
+            # === Backend ===
+            - name: Install backend dependencies
+              run: npm install
+              working-directory: backend
+
+            - name: Run Integration Tests
+              run: npm test
+              env:
+                  PRODUCTION: false
+                  SESSION_SECRET: abc123
+              working-directory: backend/game-service
+
     build-and-deploy:
         name: Build and deploy
         runs-on: ubuntu-latest

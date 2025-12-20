@@ -7,6 +7,7 @@ const scoreRouter = Router();
 scoreRouter.get('/top', async (req: express.Request, res: express.Response) => {
     const min = Number(req.query.min);
     const max = Number(req.query.max);
+    console.log(`min=${min}, max=${max}`);
     let topScores = await getTopScores(min, max);
     res.json({'topScores': topScores});
 });

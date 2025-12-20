@@ -1,6 +1,7 @@
 import 'fs';
 import * as fs from "node:fs";
 import path from "path";
+import {fileURLToPath} from "url";
 
 export class Room {
     roomId: string = ""
@@ -21,7 +22,9 @@ export class Room {
 export const availableRooms: Map<string, Room> = new Map();
 
 export async function loadAllRooms() {
-    const dirPath = path.resolve('download', 'rooms');
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const dirPath = path.resolve(__dirname, '../download/rooms');
     fs.readdir(dirPath, (err, files) => {
         if (err) {
             throw err;

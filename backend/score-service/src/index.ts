@@ -6,7 +6,7 @@ dotenv.config();
 
 async function startup() {
     await initDatabase();
-    startExpressApp()
+    await startExpressApp();
 }
 
 startup().then(() => {
