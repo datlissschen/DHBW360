@@ -5,4 +5,5 @@ WORKDIR /dhbw360/app
 COPY package.json ./
 RUN npm install --omit=dev --force
 
-CMD ["node", "dist/frontend/server/server.mjs"]
+RUN npm install -g http-server
+CMD ["http-server", "dist/frontend/browser", "-p", "4000"]
