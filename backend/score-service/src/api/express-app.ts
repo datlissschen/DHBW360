@@ -1,11 +1,13 @@
 import express from 'express';
 import scoreRouter from "@/api/score-routes";
+import cors from "cors";
 
 const expressApp = express();
 
 expressApp.use(express.json());
 expressApp.use(express.urlencoded({ extended: true }));
 expressApp.use('/score', scoreRouter);
+expressApp.use(cors());
 expressApp.use((req, res, next) => {
     console.log(req.originalUrl)
 })
