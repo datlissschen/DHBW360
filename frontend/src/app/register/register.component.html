@@ -1,38 +1,62 @@
-<div class="auth-container">
-  <h2>Account erstellen</h2>
-  <p class="subtitle">Registriere dich um in der Bestenliste aufzutauchen!</p>
+<div class="flex flex-col items-center justify-center min-h-screen w-full p-4">
 
-  <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
-    <div class="form-group">
-      <label for="reg-username">Benutzername</label>
-      <input
-        id="reg-username"
-        type="text"
-        formControlName="username"
-        placeholder="Wähle einen Benutzernamen"
-        [class.is-invalid]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md border border-[var(--border-light)]">
+    <h1 class="page-headline">Registrieren</h1>
+
+    <div *ngIf="errorMessage" class="error-box mb-4">
+      <span class="text-sm font-semibold">{{ errorMessage }}</span>
     </div>
 
-    <div class="form-group">
-      <label for="reg-password">Password</label>
-      <input
-        id="reg-password"
-        type="password"
-        formControlName="password"
-        placeholder="Wähle ein starkes Password"
-        [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-      <small *ngIf="registerForm.get('password')?.errors?.['minlength']" class="help-text">
-        Password must be at least 6 characters long.
-      </small>
-    </div>
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister(); $event.preventDefault()" class="flex flex-col gap-4">
 
-    <button type="submit" [disabled]="registerForm.invalid">
-      Account erstellen
-    </button>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-bold opacity-80">Benutzername</label>
+        <input formControlName="username" type="text" placeholder="Mind. 3 Zeichen" />
 
-    <div class="footer-links">
-      <span>Du hast schon ein Account? </span>
-      <a routerLink="/login">Hier anmelden!</a>
+        <small *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
+               class="text-xs text-red-600">
+          Benutzername muss mindestens 3 Zeichen lang sein.
+        </small>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-bold opacity-80">Passwort</label>
+        <input
+          formControlName="password"
+          type="password"
+          placeholder="Wähle ein Password"
+          required />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-bold opacity-80">Passwort bestätigen</label>
+        <input
+          formControlName="confirmPassword"
+          type="password"
+          placeholder="Password wiederholen"
+          required />
+
+        <small *ngIf="registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched"
+               class="text-xs text-red-600">
+          Passwörter stimmen nicht überein.
+        </small>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="registerForm.invalid || isLoading"
+        class="button-red w-full mt-4 py-3 font-bold text-white uppercase tracking-wide disabled:opacity-50 disabled:cursor-not-allowed"
+        style="background-color: var(--primary-color);">
+        <span *ngIf="!isLoading">Registrieren</span>
+        <span *ngIf="isLoading">Lädt...</span>
+      </button>
+
+    </form>
+
+    <div class="mt-6 text-center text-sm">
+      <span class="opacity-70">Schon ein Account?</span>
+      <a href="/login" class="ml-1 font-semibold" style="color: var(--link-highlight);">Anmelden</a>
     </div>
-  </form>
+  </div>
+
 </div>

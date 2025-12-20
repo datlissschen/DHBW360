@@ -1,33 +1,80 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from '../auth/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import {RouterModule} from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { AuthService } from '../auth/auth.service';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-register',
-  imports: [RouterModule, CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css',
+  styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
-  registerForm = new FormGroup({
-    username: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required, Validators.minLength(6)])
-  });
+export class RegisterComponent implements OnInit {
+  registerForm!: FormGroup;
+  isLoading = false;
+  errorMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  onRegister() {
+  ngOnInit(): void {
+    this.initForm();
+  }
+
+
+  private initForm(): void {
+    this.registerForm = this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required]]
+    }, {
+      validators: this.passwordMatchValidator // check matching passwords
+    });
+  }
+
+  private passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password');
+    const confirmPassword = control.get('confirmPassword');
+
+    if (password && confirmPassword && password.value !== confirmPassword.value) {
+      return { passwordMismatch: true };
+    }
+    return null;
+  }
+
+  onRegister(): void {
+
+    this.errorMessage = '';
+
     if (this.registerForm.valid) {
+      this.isLoading = true;
+
       this.authService.register(this.registerForm.value).subscribe({
         next: () => {
-          alert('Registration successful! Please login.');
           this.router.navigate(['/login']);
         },
-        error: (err) => alert('Registration failed: ' + err.message)
+        error: (err) => {
+          this.isLoading = false;
+
+          if (err.status === 409) {
+            this.errorMessage = 'Dieser Benutzername ist bereits vergeben.';
+          } else {
+            this.errorMessage = 'Registrierung fehlgeschlagen. Bitte versuchen Sie es später erneut.';
+          }
+        },
+        complete: () => this.isLoading = false
       });
+    } else {
+      this.markFormGroupTouched(this.registerForm);
     }
+  }
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+    });
   }
 }
