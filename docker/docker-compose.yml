@@ -17,6 +17,7 @@ services:
       dockerfile: ./game-service/Dockerfile
     ports:
       - 9501:8081
+    env_file: ./backend/game-service/.env
     volumes:
       - ./backend/game-service/dist/:/dhbw360/app/dist
       - ./backend/game-service/.env:/dhbw360/app/.env
@@ -29,6 +30,7 @@ services:
       dockerfile: ./score-service/Dockerfile
     ports:
       - 9502:8082
+    env_file: ./backend/score-service/.env
     volumes:
       - ./backend/score-service/dist/:/dhbw360/app/dist
       - ./backend/score-service/.env:/dhbw360/app/.env
