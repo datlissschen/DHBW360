@@ -22,4 +22,8 @@ export class HomeComponent {
   startGame() {
     this.router.navigate(['/game'], { queryParams: { rounds: this.roundsToPlay } });
   }
+
+  goToLogin() {
+    this.router.navigate(['/login']);
+  }
 }
