@@ -22,7 +22,10 @@ const expressApp = express();
 
 expressApp.use(express.json());
 expressApp.use(express.urlencoded({ extended: true }));
-expressApp.use(cors());
+expressApp.use(cors({
+    origin: process.env.HOST,
+    credentials: true,
+}));
 console.log(process.env.SESSION_SECRET)
 expressApp.use(session({
     secret: process.env.SESSION_SECRET as string,

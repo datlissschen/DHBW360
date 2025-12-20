@@ -94,7 +94,7 @@ export class GameComponent implements AfterViewInit {
     ).subscribe(rounds => {
       this.http.post<IGameStartResponse>(`${environment.gameServiceBaseUrl}/game/start-game`, {
         rounds: rounds
-      }).subscribe({
+      }, {withCredentials: true}).subscribe({
         next: data => {
           this.currentRound = data.game.currentRoundNumber;
           this.maxRounds = data.game.maxRounds;
@@ -160,7 +160,7 @@ export class GameComponent implements AfterViewInit {
       selectedLocationId: this.selectedLocationId,
       selectedFloorId: this.selectedFloor,
       selectedRoomId: this.selectedRoom,
-    }).subscribe({
+    }, {withCredentials: true}).subscribe({
       next: data => {
         this.cumulativeScore += data.game.rounds[data.game.currentRoundNumber - 2].score;
         this.cdRef.detectChanges();
