@@ -28,10 +28,10 @@ jobs:
                     cd frontend
                     npm ci --force
 
-            -   name: Build Angular (Browser + Server)
+            -   name: Build Angular
                 run: |
                     cd frontend
-                    npm run build
+                    npm run build --configuration production
 
             -   name: Copy package.json to server
                 uses: appleboy/scp-action@v0.1.7
