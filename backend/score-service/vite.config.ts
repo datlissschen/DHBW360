@@ -46,7 +46,7 @@ export default defineConfig(({ command }) => {
                 VitePluginNode({
                     adapter: 'express',
                     appPath: './score-service/src/index.ts',
-                    exportName: 'viteNodeApp',
+                    exportName: 'expressApp',
                 })
         );
     }

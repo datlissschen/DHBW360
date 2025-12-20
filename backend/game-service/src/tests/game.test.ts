@@ -1,30 +1,24 @@
 import supertestSession from 'supertest-session';
-import {beforeAll, beforeEach, describe, expect, it} from 'vitest';
+import {beforeAll, describe, expect, it} from 'vitest';
 import expressApp from '../api/express-app';
-import {initDatabase} from "@/database";
 import {loadAllRooms} from "@/room-manager";
 import dotenv from 'dotenv';
+import {downloadAllFiles} from "@/s3";
 
 dotenv.config({path: `./game-service/.env`});
 
-
 let session: any;
-let userId: string | undefined;
 let gameId: string | undefined;
 let maxRounds: number | undefined;
 let currentRoundNumber: number | undefined;
-let correctNextAnswer: { locationId: string, floorId: string, roomId: string } | undefined;
 
 beforeAll(async () => {
     session = supertestSession(expressApp);
-    await initDatabase()
-    //await downloadAllFiles()
+    await downloadAllFiles()
     await loadAllRooms()
-    userId = undefined;
     gameId = undefined;
     maxRounds = undefined;
     currentRoundNumber = undefined;
-    correctNextAnswer = undefined;
 })
 
 async function httpPost(session: any, endpoint: string, csrfToken: string, data = {}) {
@@ -45,73 +39,67 @@ async function httpGet(session: any, endpoint: string, csrfToken: string, data =
 
 describe('Test game workflow', () => {
 
-    beforeEach(async () => {
+    // 401 because no username is set in the session before starting a game
+    it('should submit an answer without a game session and fail with 401 UNAUTHORIZED', async () => {
         session = supertestSession(expressApp);
-    });
-
-    it('should submit an answer without a game session and without authentication and fail with 401 UNAUTHORIZED', async () => {
         const postData = {
             selectedLocationId: "LE1",
             selectedFloorId: "LE2_2",
             selectedRoomId: "Z1",
-            userId: userId,
         }
         const response = await httpPost(session, '/game/check-answer', '', postData);
         expect(response.status).toBe(401);
     })
 
-    it('should start a new game without authentication and 2 rounds', async () => {
+    it('should simulate a game session without login', async () => {
+        session = supertestSession(expressApp);
+
+        // Start a new game without login and 2 rounds
         const rounds = 2;
-        const postData = {
+        let postData = {
             rounds: rounds,
         };
-        const response = await httpPost(session, '/game/start-game', '', postData);
+        let response = await httpPost(session, '/game/start-game', '', postData);
         expect(response.status).toBe(200);
-        expect(response.body.userId).toBeDefined();
+        expect(response.body.username).toBeDefined();
         expect(response.body.game).toBeDefined();
         expect(response.body.game.gameId).toBeDefined();
         expect(response.body.game.maxRounds).toEqual(rounds);
         expect(response.body.game.currentRoundNumber).toEqual(1);
         expect(response.body.game.rounds.length).toEqual(rounds);
-        userId = response.body.userId;
         gameId = response.body.game.gameId;
         maxRounds = response.body.game.maxRounds;
         currentRoundNumber = response.body.game.currentRoundNumber;
-    });
 
-    it('should submit an incorrect answer', async () => {
-        const postData = {
+        // Submit an incorrect answer
+        let postData2 = {
             selectedLocationId: "LE1",
             selectedFloorId: "LE2_2",
             selectedRoomId: "Z1",
-            userId: userId,
         }
-        const response = await httpPost(session, '/game/check-answer', '', postData);
+        response = await httpPost(session, '/game/check-answer', '', postData2);
         expect(response.status).toBe(200);
         expect(response.body.correctAnswer).toBeFalsy()
         checkGameReponse(response);
-    })
+        let nextRound = response.body.game.rounds[currentRoundNumber!-1];
+        let correctNextAnswer: { locationId: string, floorId: string, roomId: string } =
+            {
+                locationId: nextRound.room.locationId,
+                floorId: nextRound.room.floorId,
+                roomId: nextRound.room.qualifiedName,
+            };
 
-    it('should GET the correct answer for the next round', async () => {
-        const response = await httpGet(session, '/game/test/correct-answer', '', {userId: userId});
-        console.log(response.body);
-        expect(response.status).toBe(200)
-        expect(response.body.correctAnswer).toBeDefined()
-        correctNextAnswer = response.body.correctAnswer;
-    })
-
-    it('should submit a correct answer', async () => {
-        const postData = {
+        // Submit a correct answer
+        let postData3 = {
             selectedLocationId: correctNextAnswer!.locationId,
             selectedFloorId: correctNextAnswer!.floorId,
-            selectedRoomId: correctNextAnswer!.roomId,
-            userId: userId,
+            selectedRoomId: correctNextAnswer!.roomId
         }
-        const response = await httpPost(session, '/game/check-answer', '', postData);
+        response = await httpPost(session, '/game/check-answer', '', postData3);
         expect(response.status).toBe(200);
         expect(response.body.correctAnswer).toBeTruthy()
         checkGameReponse(response);
-    })
+    });
 
     function checkGameReponse( response: any) {
         expect(response.body.gameEnd).toBeDefined()

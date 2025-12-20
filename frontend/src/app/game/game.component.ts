@@ -2,7 +2,7 @@ import {
   Component, AfterViewInit, ViewChild, ElementRef, ChangeDetectionStrategy, HostListener,
   ChangeDetectorRef
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { map } from 'rxjs/operators';
@@ -78,6 +78,7 @@ export class GameComponent implements AfterViewInit {
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
+    private router: Router,
     private cdRef: ChangeDetectorRef
   ) {}
 
@@ -151,7 +152,7 @@ export class GameComponent implements AfterViewInit {
 
   onSubmit(): void {
     if (!this.selectedLocation || !this.selectedFloor || !this.selectedRoom) {
-      alert('Bitte wählen Sie alle drei Schritte aus.');
+      alert('Bitte wähle alle drei Schritte aus.');
       return;
     }
 
@@ -161,16 +162,19 @@ export class GameComponent implements AfterViewInit {
       selectedRoomId: this.selectedRoom,
     }).subscribe({
       next: data => {
+        this.cumulativeScore += data.game.rounds[data.game.currentRoundNumber - 2].score;
+        this.cdRef.detectChanges();
+
         alert(data.correctAnswer ? "Korrekt!" : "Falsch!");
 
         if (data.gameEnd) {
           alert("Spielende!");
+          this.router.navigate(["/"]);
         } else {
           this.currentRound = data.game.currentRoundNumber;
-          this.cumulativeScore += data.game.rounds[data.game.currentRoundNumber - 2].score;
           this.initPannellum(data.game.rounds[data.game.currentRoundNumber - 1].roomImgURL);
           this.resetGameState();
-          this.cdRef.markForCheck();
+          this.cdRef.detectChanges();
         }
       },
       error: err => console.error(err)

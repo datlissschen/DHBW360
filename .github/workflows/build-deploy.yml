@@ -6,6 +6,14 @@ on:
     workflow_dispatch:
 
 jobs:
+    automated-tests:
+        - name: Run Integration Tests for game-service
+          run: npm test
+          env:
+              PRODUCTION: false
+              SESSION_SECRET: abc123
+          working-directory: backend/game-service
+
     build-and-deploy:
         name: Build and deploy
         runs-on: ubuntu-latest

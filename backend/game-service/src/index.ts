@@ -8,7 +8,7 @@ dotenv.config();
 async function startup() {
     await downloadAllFiles()
     await loadAllRooms()
-    startExpressApp()
+    await startExpressApp()
 }
 
 startup().then(() => {

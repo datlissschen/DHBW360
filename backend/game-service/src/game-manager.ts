@@ -1,24 +1,9 @@
 import {selectRandomRooms} from "@/random-selector";
 import {ensureImageFile} from "@/image-service";
-import {getRoomById, Room} from "./room-manager";
-
-export interface Game {
-    gameId: string;
-    maxRounds: number;
-    currentRoundNumber: number;
-    rounds: Round[];
-}
-
-export interface Round {
-    roundNumber: number;
-    room: Room;
-    floorNumber: number;
-    roomImgURL: string;
-    score: number | undefined;
-}
-
-// Map<username, Game>
-const games: Map<string, Game> = new Map()
+import {Room} from "./room-manager";
+import {Game} from "@/types/game";
+import {Round} from "@/types/round";
+import {games} from './game-store';
 
 export async function startGame(rounds: number, username: string): Promise<Game> {
     const randomRooms = selectRandomRooms(rounds)
@@ -43,11 +28,14 @@ export async function startGame(rounds: number, username: string): Promise<Game>
         currentRoundNumber: 1,
         rounds: roundsData
     };
+    console.log(`Set game object for user ${username}`);
     games.set(username, game)
+    console.log("1games=", games);
     return game;
 }
 
 export function getGameByUser(username: string) {
+    console.log("games=", games);
     return games.get(username);
 }
 
@@ -56,6 +44,7 @@ export function saveGame(username: string, game: Game) {
 }
 
 export function stopGame(username: string) {
+    console.log(`Stop game for ${username}`);
     games.delete(username);
 }
 
