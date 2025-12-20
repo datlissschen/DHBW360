@@ -13,7 +13,7 @@ expressApp.use((req, res, next) => {
 export async function startExpressApp() {
     const port = Number(process.env.EXPRESS_PORT || 8082);
     return new Promise<void>((resolve, reject) => {
-        const server = expressApp.listen(port, '127.0.0.1', () => {
+        const server = expressApp.listen(port, '0.0.0.0', () => {
             console.log(`Listening on port ${port}`);
             console.log('Server address:', server.address());
             resolve();
