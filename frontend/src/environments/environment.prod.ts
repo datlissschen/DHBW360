@@ -1,5 +1,6 @@
 export const environment = {
     production: true,
-    gameServiceBaseUrl: 'http://vsv-research.volkmann-webservices.de:8081',
-    scoreServiceBaseUrl: 'http://vsv-research.volkmann-webservices.de:8082',
+    // Use container names for internal networking
+    gameServiceBaseUrl: 'dhbw360-game-service-1:9501',
+    scoreServiceBaseUrl: 'dhbw360-score-service-1:9502',
 };
