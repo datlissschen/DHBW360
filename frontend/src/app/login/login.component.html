@@ -3,29 +3,48 @@
   <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md border border-[var(--border-light)]">
     <h1 class="page-headline">Login</h1>
 
-    <form class="flex flex-col gap-4">
+    <div *ngIf="errorMessage" class="error-box mb-4">
+      <span class="text-sm font-semibold">{{ errorMessage }}</span>
+    </div>
 
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit(); $event.preventDefault()" class="flex flex-col gap-4">
 
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit(); $event.preventDefault()">
-        <div class="flex flex-col gap-1">
-          <label class="text-sm font-bold opacity-80">Benutzername</label>
-          <input formControlName="username" type="text" placeholder="Dein Benutzername" required />
-        </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-bold opacity-80">Benutzername</label>
+        <input
+          type="text"
+          formControlName="username"
+          placeholder="Dein Benutzername" />
+        <small *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="text-xs text-red-600">
+          Benutzername ist erforderlich.
+        </small>
+      </div>
 
-        <div class="flex flex-col gap-1">
-          <label class="text-sm font-bold opacity-80">Password</label>
-          <input formControlName="password" type="password" placeholder="Dein Password" required />
-        </div>
-        <button type="submit" class="button-red w-full mt-2 py-3 font-bold text-white uppercase tracking-wide"
-                style="background-color: var(--primary-color);">
-          Anmelden
-        </button>
-      </form>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-bold opacity-80">Passwort</label>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Dein Passwort" />
+        <small *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-xs text-red-600">
+          Passwort ist erforderlich.
+        </small>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="loginForm.invalid || isLoading"
+        class="button-red w-full mt-2 py-3 font-bold text-white uppercase tracking-wide disabled:opacity-50"
+        style="background-color: var(--primary-color);">
+        <span *ngIf="!isLoading">Anmelden</span>
+        <span *ngIf="isLoading">Lädt...</span>
+      </button>
+
     </form>
 
     <div class="mt-6 text-center text-sm">
       <span class="opacity-70">Noch kein Account?</span>
-      <a href="/register" class="ml-1 font-semibold" style="color: var(--link-highlight);">Account erstellen</a>
+      <a routerLink="/register" class="ml-1 font-semibold" style="color: var(--link-highlight);">Account erstellen</a>
     </div>
   </div>
 

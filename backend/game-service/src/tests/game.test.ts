@@ -1,18 +1,28 @@
 import supertestSession from 'supertest-session';
-import {beforeAll, describe, expect, it} from 'vitest';
+import {beforeAll, afterAll, describe, expect, it} from 'vitest';
 import expressApp from '../api/express-app';
 import {loadAllRooms} from "@/room-manager";
 import dotenv from 'dotenv';
 import {downloadAllFiles} from "@/s3";
+import nock from 'nock';
+import {getUserScore} from "../../../score-service/src/score-manager";
 
 dotenv.config({path: `./game-service/.env`});
 
 let session: any;
 let gameId: string | undefined;
+let totalScore: number = 0;
+let username: string | undefined;
 let maxRounds: number | undefined;
 let currentRoundNumber: number | undefined;
 
 beforeAll(async () => {
+    // Simulating network requests to other services with nock
+    nock.disableNetConnect();
+    nock.enableNetConnect((host) => {
+        return host.includes('127.0.0.1') || host.includes('localhost') || host.includes('amazonaws.com');
+    });
+
     session = supertestSession(expressApp);
     await downloadAllFiles()
     await loadAllRooms()
@@ -52,6 +62,19 @@ describe('Test game workflow', () => {
     })
 
     it('should simulate a game session without login', async () => {
+        const scope = nock('http://127.0.0.1:8082')
+            .persist()
+            .post('/score/add', () => true)
+            .reply(200, (uri, requestBody) => {
+                const body = requestBody as any;
+                console.log('Intercepted Body:', requestBody);
+                totalScore += body.amount;
+                return {
+                    username: username,
+                    success: true,
+                    newTotalScore: totalScore
+                };
+            });
         session = supertestSession(expressApp);
 
         // Start a new game without login and 2 rounds
@@ -67,6 +90,7 @@ describe('Test game workflow', () => {
         expect(response.body.game.maxRounds).toEqual(rounds);
         expect(response.body.game.currentRoundNumber).toEqual(1);
         expect(response.body.game.rounds.length).toEqual(rounds);
+        username = response.body.username;
         gameId = response.body.game.gameId;
         maxRounds = response.body.game.maxRounds;
         currentRoundNumber = response.body.game.currentRoundNumber;
@@ -99,6 +123,8 @@ describe('Test game workflow', () => {
         expect(response.status).toBe(200);
         expect(response.body.correctAnswer).toBeTruthy()
         checkGameReponse(response);
+
+        expect(scope.isDone()).toBe(true);
     });
 
     function checkGameReponse(response: any) {
@@ -109,4 +135,9 @@ describe('Test game workflow', () => {
         expect(response.body.game.currentRoundNumber).toEqual(currentRoundNumber!+1)
         currentRoundNumber!++
     }
+});
+
+afterAll(() => {
+    nock.cleanAll();
+    nock.enableNetConnect();
 });
