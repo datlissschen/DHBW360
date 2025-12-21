@@ -1,6 +1,7 @@
 import { S3Client, ListObjectsV2Command, GetObjectCommand } from "@aws-sdk/client-s3";
 import path from "path";
 import * as fs from "node:fs";
+import {fileURLToPath} from "url";
 
 let s3: S3Client | null = null;
 
@@ -38,7 +39,9 @@ export async function downloadAllFiles() {
 
 export async function downloadFile(key: string) {
     const client = getS3();
-    const downloadDir = path.resolve("download");
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const downloadDir = path.resolve(__dirname, '../download');
     fs.mkdirSync(downloadDir, { recursive: true });
 
     const getCommand = new GetObjectCommand({
