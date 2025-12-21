@@ -1,9 +1,5 @@
-FROM node:22
+FROM nginx:alpine
 
-WORKDIR /dhbw360/app
+RUN rm /etc/nginx/conf.d/default.conf
 
-COPY package.json ./
-RUN npm install --omit=dev --force
-
-RUN npm install -g http-server
-CMD ["http-server", "dist/frontend/browser", "-p", "4000"]
+COPY nginx.conf /etc/nginx/conf.d/default.conf

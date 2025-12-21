@@ -4,7 +4,7 @@ import path from 'path'
 export default defineConfig({
     test: {
         include: ['game-service/src/tests/**/*.test.ts'],
-        env: {}, // überschreibt alles automatisch geladene
+        env: {},
     },
     resolve: {
         alias: {

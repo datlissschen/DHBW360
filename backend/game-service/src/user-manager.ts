@@ -1,8 +1,8 @@
-export async function checkLogin(token: string): Promise<boolean> {
+export async function checkLogin(token: string): Promise<string | undefined> {
     const res = await fetch(`${process.env.LOGIN_BASE_URL}/verify?token=${token}`,
             {
                 method: 'GET'
             });
     const json = await res.json();
-    return json.valid;
+    return json.valid ? json.username : undefined;
 }

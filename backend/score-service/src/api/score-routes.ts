@@ -7,16 +7,17 @@ const scoreRouter = Router();
 scoreRouter.get('/top', async (req: express.Request, res: express.Response) => {
     const min = Number(req.query.min);
     const max = Number(req.query.max);
+    console.log(`min=${min}, max=${max}`);
     let topScores = await getTopScores(min, max);
     res.json({'topScores': topScores});
 });
 
-scoreRouter.get('/get/:userId', async (req: express.Request, res: express.Response) => {
-    const userId = req.params.userId;
-    console.log(`get score for user ${userId}`);
-    const score = await getUserScore(userId);
+scoreRouter.get('/get/:username', async (req: express.Request, res: express.Response) => {
+    const username = req.params.username;
+    console.log(`get score for user ${username}`);
+    const score = await getUserScore(username);
     console.log(`score=${score}`)
-    res.json({userId: userId, score: score | 0});
+    res.json({username: username, score: score | 0});
 });
 
 scoreRouter.post('/add', async (req: express.Request, res: express.Response) => {

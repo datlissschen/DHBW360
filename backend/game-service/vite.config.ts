@@ -46,7 +46,7 @@ export default defineConfig(({ command }) => {
                 VitePluginNode({
                     adapter: 'express',
                     appPath: './game-service/src/index.ts',
-                    exportName: 'viteNodeApp',
+                    exportName: 'expressApp',
                 })
         );
     }
