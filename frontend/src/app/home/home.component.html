@@ -10,9 +10,14 @@
       Informationen
     </button>
 
-    <button type="button" class="start-button ml-5" (click)="goToLogin()">
-      Login
-    </button>
+    <span class="m-auto">
+      @if (username) {
+        <span>Angemeldet als {{ username }}</span>
+      }
+      <button type="button" class="start-button ml-5" (click)="goToLogin()">
+        Login
+      </button>
+    </span>
 
     <div class="action-area">
       <form (ngSubmit)="startGame()">

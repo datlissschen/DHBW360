@@ -17,7 +17,7 @@ export async function initDatabase() {
     })
     await executeDBQuery('CREATE TABLE IF NOT EXISTS scores(' +
             'username CHAR(32) PRIMARY KEY,' +
-            'score CHAR(16)' +
+            'score INTEGER DEFAULT 0' +
             ')')
 }
 

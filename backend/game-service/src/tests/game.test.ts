@@ -101,7 +101,7 @@ describe('Test game workflow', () => {
         checkGameReponse(response);
     });
 
-    function checkGameReponse( response: any) {
+    function checkGameReponse(response: any) {
         expect(response.body.gameEnd).toBeDefined()
         expect(response.body.game).toBeDefined()
         expect(response.body.game.gameId).toEqual(gameId)
