@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'http://localhost:8007/api/auth';
+  private apiUrl = 'http://vsv-research.volkmann-webservices.de/auth';
 
   constructor(private http: HttpClient) {}
 

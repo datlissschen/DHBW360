@@ -93,7 +93,8 @@ export class GameComponent implements AfterViewInit {
       map(params => Number(params.get('rounds')) || 1)
     ).subscribe(rounds => {
       this.http.post<IGameStartResponse>(`${environment.gameServiceBaseUrl}/game/start-game`, {
-        rounds: rounds
+        authKey: localStorage.getItem('auth_key'),
+        rounds: rounds,
       }, {withCredentials: true}).subscribe({
         next: data => {
           this.currentRound = data.game.currentRoundNumber;
@@ -157,6 +158,7 @@ export class GameComponent implements AfterViewInit {
     }
 
     this.http.post<{correctAnswer: boolean, gameEnd: boolean, game: IGame}>(`${environment.gameServiceBaseUrl}/game/check-answer`, {
+      authKey: localStorage.getItem('auth_key'),
       selectedLocationId: this.selectedLocationId,
       selectedFloorId: this.selectedFloor,
       selectedRoomId: this.selectedRoom,
