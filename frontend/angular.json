@@ -31,12 +31,7 @@
             "scripts": [
               "node_modules/pannellum/build/pannellum.js",
               "node_modules/leaflet/dist/leaflet.js"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            ]
           },
           "configurations": {
             "production": {

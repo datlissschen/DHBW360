@@ -28,10 +28,10 @@ jobs:
                     cd frontend
                     npm ci --force
 
-            -   name: Build Angular (Browser + Server)
+            -   name: Build Angular
                 run: |
                     cd frontend
-                    npm run build
+                    npm run build:prod
 
             -   name: Copy package.json to server
                 uses: appleboy/scp-action@v0.1.7
@@ -61,13 +61,11 @@ jobs:
                     key: ${{ secrets.DEPLOY_KEY }}
                     script: |
                         rm -rf /home/tinf24b/dhbw360/frontend/dist/frontend/browser
-                        rm -rf /home/tinf24b/dhbw360/frontend/dist/frontend/server
 
             -   name: Prepare deploy folder
                 run: |
                     mkdir -p frontend_deploy
                     cp -r frontend/dist/frontend/browser frontend_deploy/
-                    cp -r frontend/dist/frontend/server frontend_deploy/
 
             -   name: Copy built Angular app (dist/) to server
                 uses: appleboy/scp-action@v0.1.7
