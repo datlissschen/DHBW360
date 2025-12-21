@@ -2,15 +2,8 @@ import * as fs from 'fs/promises';
 import path from "path";
 import {downloadFile} from "@/s3";
 
-/*export const available_rooms: string[] = []
-export function readDownloadedImages() {
-    fs.readdirSync('download/rooms').forEach(file => {
-        available_rooms.push(file)
-    })
-}*/
-
 export async function ensureImageFile(fileName: string) {
-    const fullFilePath = path.resolve('download', fileName);
+    const fullFilePath = path.resolve('./game-service/download', fileName);
     try {
         await fs.access(fullFilePath);
     } catch (error) {
