@@ -29,7 +29,6 @@ jobs:
                   S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
                   S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
                   S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
-              working-directory: backend/game-service
 
     build-and-deploy:
         name: Build and deploy
