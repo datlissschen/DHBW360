@@ -4,7 +4,7 @@ import {environment} from '../../environments/environment';
 import {NgTemplateOutlet} from '@angular/common';
 
 interface IScoreEntry {
-  user_id: string;
+  username: string;
   score: number;
 }
 
