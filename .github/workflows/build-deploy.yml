@@ -21,6 +21,7 @@ jobs:
               working-directory: backend
             - name: Run Integration Tests
               run: npm test
+              working-directory: backend/game-service
               env:
                   PRODUCTION: false
                   SESSION_SECRET: abc123
