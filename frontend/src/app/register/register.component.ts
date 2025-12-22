@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
@@ -18,13 +18,13 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.initForm();
   }
-
 
   private initForm(): void {
     this.registerForm = this.fb.group({
@@ -39,7 +39,6 @@ export class RegisterComponent implements OnInit {
   private passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password');
     const confirmPassword = control.get('confirmPassword');
-
     if (password && confirmPassword && password.value !== confirmPassword.value) {
       return { passwordMismatch: true };
     }
@@ -47,7 +46,6 @@ export class RegisterComponent implements OnInit {
   }
 
   onRegister(): void {
-
     this.errorMessage = '';
 
     if (this.registerForm.valid) {
@@ -65,6 +63,7 @@ export class RegisterComponent implements OnInit {
           } else {
             this.errorMessage = 'Registrierung fehlgeschlagen. Bitte versuchen Sie es später erneut.';
           }
+          this.cdRef.detectChanges();
         },
         complete: () => this.isLoading = false
       });
@@ -72,6 +71,7 @@ export class RegisterComponent implements OnInit {
       this.markFormGroupTouched(this.registerForm);
     }
   }
+
   private markFormGroupTouched(formGroup: FormGroup) {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();

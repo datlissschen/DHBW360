@@ -1,12 +1,9 @@
-import { Component } from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
 import { CommonModule } from '@angular/common';
 import {RouterModule} from '@angular/router';
-
-
-
 
 @Component({
   selector: 'app-login',
@@ -24,7 +21,7 @@ export class LoginComponent {
   errorMessage: string = '';
   isLoading: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private cdRef: ChangeDetectorRef) { }
 
   onSubmit() {
     if (this.loginForm.valid) {
@@ -41,9 +38,13 @@ export class LoginComponent {
           this.router.navigate(['/']);
         },
         error: (err) => {
-          console.error('Login Error:', err);
-          this.errorMessage = 'Passwort oder Benutzername falsch';
+          if (err.status === 401) {
+            this.errorMessage = 'Passwort oder Benutzername falsch';
+          } else {
+            this.errorMessage = 'Es ist ein Fehler beim Anmelden aufgetreten.';
+          }
           this.isLoading = false;
+          this.cdRef.detectChanges();
         }
       });
     }
