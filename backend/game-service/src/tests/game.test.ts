@@ -127,7 +127,7 @@ describe('Test game workflow', () => {
         expect(scope.isDone()).toBe(true);
     });
 
-    function checkGameReponse( response: any) {
+    function checkGameReponse(response: any) {
         expect(response.body.gameEnd).toBeDefined()
         expect(response.body.game).toBeDefined()
         expect(response.body.game.gameId).toEqual(gameId)

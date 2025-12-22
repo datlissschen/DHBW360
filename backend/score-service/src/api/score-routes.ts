@@ -7,7 +7,6 @@ const scoreRouter = Router();
 scoreRouter.get('/top', async (req: express.Request, res: express.Response) => {
     const min = Number(req.query.min);
     const max = Number(req.query.max);
-    console.log(`min=${min}, max=${max}`);
     let topScores = await getTopScores(min, max);
     res.json({'topScores': topScores});
 });
@@ -23,9 +22,10 @@ scoreRouter.get('/get/:username', async (req: express.Request, res: express.Resp
 scoreRouter.post('/add', async (req: express.Request, res: express.Response) => {
     const username = req.body.username;
     const amount = req.body.amount;
-    const authKey = req.body.authKey; // Only allow the other services to use this endpoint
+    const authKey = req.body.authKey; // Only allow the other services to use this endpoint, not users directly
+    console.log(`add ${amount} points to user ${username} with authKey ${authKey}`);
     if (!authKey || authKey != process.env.AUTH_KEY) {
-        res.sendStatus(StatusCodes.UNAUTHORIZED);
+        res.status(StatusCodes.UNAUTHORIZED).json({error: 'Not authorized to use this endpoint'});
         return;
     }
     const success = await addUserScore(username, amount);

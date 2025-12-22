@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import {faCircleInfo} from '@fortawesome/free-solid-svg-icons';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {ScoreboardComponent} from '../scoreboard/scoreboard.component';
+import {AuthService} from '../auth/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -16,8 +17,14 @@ export class HomeComponent {
 
   protected informationIcon = faCircleInfo;
   public roundsToPlay: number = 6;
+  public username: string | undefined;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {
+    this.authService.getUsername(localStorage.getItem('access_token') || '').then(username => {
+      this.username = username;
+      console.log(`username=${this.username}`);
+    });
+  }
 
   startGame() {
     this.router.navigate(['/game'], { queryParams: { rounds: this.roundsToPlay } });

@@ -8,9 +8,6 @@ expressApp.use(express.json());
 expressApp.use(express.urlencoded({ extended: true }))
 expressApp.use(cors());
 expressApp.use('/score', scoreRouter);
-expressApp.use((req, res, next) => {
-    console.log(req.originalUrl)
-})
 
 export async function startExpressApp() {
     const port = Number(process.env.EXPRESS_PORT || 8082);

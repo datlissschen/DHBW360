@@ -10,6 +10,7 @@ gameRouter.post('/start-game', async (req: express.Request, res: express.Respons
     if (!req.body.rounds) res.status(StatusCodes.BAD_REQUEST).json({error: 'Attribute "rounds" not found in request body'});
     const rounds = Number(req.body.rounds);
     const accessToken = req.body.accessToken;
+    console.log("start-game called with rounds=" + rounds + " and accessToken=" + accessToken);
     let username: string | undefined;
     if (accessToken) {
         username = await checkLogin(accessToken);
@@ -35,7 +36,6 @@ gameRouter.post('/check-answer', async (req: express.Request, res: express.Respo
         });
         return;
     }
-    console.log("CHECK-ANSWER ENDPOINT");
     const data = await validateRequestAndGetGame(req, res);
     if (!data) { return }
     const username = data[0]
