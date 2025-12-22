@@ -6,15 +6,15 @@
 
 .page-wrapper {
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   aspect-ratio: 16 / 9;
   background-color: var(--bg-light);
   box-shadow: var(--shadow);
   border-radius: var(--border-radius);
   display: grid;
-  grid-template-rows: auto 1fr; /* Header-Reihe und Hauptinhalt-Reihe */
+  grid-template-rows: auto 1fr;
   grid-template-columns: 1fr;
-  overflow: hidden; /* Wichtig: Der Wrapper selbst scrollt nicht */
+  overflow-x: hidden;
 }
 
 /* --- Header Bereich --- */

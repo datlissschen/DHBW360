@@ -22,18 +22,11 @@
 
   /* Ränder und Schatten */
   --border-light: #e0e0e0;
-  --shadow: 0 2px 10px rgba(0,0,0,0.08); /* Sanfterer Schatten */
+  --shadow: 0 2px 10px rgba(0,0,0,0.08);
   --border-radius: 8px;
 
   --popup-bg-color: rgba(0, 0, 0, 0.6);
   --popup-content-bg: var(--bg-dark);
-}
-
-
-body {
-  font-family: Inter, sans-serif; /* 'sans-serif' ist ein Fallback */
-  background-color: var(--background-main);
-  color: var(--text-primary);
 }
 
 html, body {
@@ -41,13 +34,13 @@ html, body {
   padding: 0;
   height: 100%;
   display: flex;
-  width: 100vw;  /* Wichtig: 100% Breite */
+  width: 100vw;
   font-family: 'Poppins', sans-serif;
   color: var(--text-dark);
   justify-content: center;
   align-items: center;
   background-color: var(--bg-dark);
-  overflow: hidden; /* Behält das 'page-wrapper'-Layout bei */
+  overflow-x: hidden;
 }
 
 .button-blue, .button-green, .button-red, .button-yellow {
