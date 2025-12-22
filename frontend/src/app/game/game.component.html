@@ -56,8 +56,16 @@
           <span class="step-status" id="status-step-2" #status2>Nicht ausgewählt</span>
         </summary>
         <div class="step-content">
-          <p>Wähle den Gebäudeteil auf dem Grundriss aus.</p>
-          <div id="map-floor" class="map-container" #mapFloor></div>
+          @if (locationNotAvailable) {
+            <div class="map-error-message">
+              <p>⚠️ Für dieses Gebäude ist leider kein Grundriss verfügbar.</p>
+            </div>
+          } @else {
+            <p>Wähle den Gebäudeteil auf dem Grundriss aus.</p>
+            <div #mapFloor id="map-floor" class="map-container"
+                 [style.display]="locationNotAvailable ? 'none' : 'block'">
+            </div>
+          }
         </div>
       </details>
 

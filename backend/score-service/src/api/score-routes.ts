@@ -30,7 +30,6 @@ scoreRouter.post('/add', async (req: express.Request, res: express.Response) => 
         res.status(StatusCodes.BAD_REQUEST).json({error: 'Missing parameters'});
         return;
     }
-    console.log(`add ${amount} points to user ${username} with authKey ${authKey}`);
     if (!authKey || authKey != process.env.AUTH_KEY) {
         res.status(StatusCodes.UNAUTHORIZED).json({error: 'Not authorized to use this endpoint'});
         return;
