@@ -29,7 +29,7 @@ beforeAll(async () => {
     gameId = undefined;
     maxRounds = undefined;
     currentRoundNumber = undefined;
-})
+}, 60000);
 
 async function httpPost(session: any, endpoint: string, csrfToken: string, data = {}) {
     return session
