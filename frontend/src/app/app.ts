@@ -1,12 +1,14 @@
 import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import {RouterOutlet} from '@angular/router';
+import {FooterComponent} from './footer/footer.component';
 
 @Component({
   selector: 'app-root',
   //imports: [RouterOutlet],
   templateUrl: './app.html',
   imports: [
-    RouterOutlet
+    RouterOutlet,
+    FooterComponent
   ],
   styleUrl: './app.css'
 })

@@ -1,8 +1,13 @@
 <div id="panorama" #panorama></div>
 
 <div class="ui-overlay">
-  <div class="header-logo">
-    <img src="dhbw360_logo_circle.png" alt="DHBW360 LogoComponent">
+  <div class="flex gap-10 align-center">
+    <div class="header-logo">
+      <img src="dhbw360_logo_circle.png" alt="DHBW360 LogoComponent">
+    </div>
+    @if (username) {
+      <span class="my-auto round-display">Angemeldet als {{ username }}</span>
+    }
   </div>
 
   <div class="game-info">

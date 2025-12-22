@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { GeoJSON } from 'leaflet';
+import {AuthService} from '../auth/auth.service';
 
 interface IGameStartResponse {
   game: IGame;
@@ -37,7 +38,8 @@ export class GameComponent implements AfterViewInit {
 
   currentRound: number = 1;
   maxRounds: number = 1;
-  cumulativeScore: number = 0;
+  cumulativeScore: number = 0
+  username: string | undefined;
 
   @ViewChild('panorama') panoramaEl!: ElementRef;
   @ViewChild('popupOverlay') popupOverlayEl!: ElementRef;
@@ -79,8 +81,14 @@ export class GameComponent implements AfterViewInit {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
+    private authService: AuthService,
     private cdRef: ChangeDetectorRef
-  ) {}
+  ) {
+    this.authService.getUsername(localStorage.getItem('access_token') || '').then(username => {
+      this.username = username;
+      this.cdRef.detectChanges();
+    });
+  }
 
   ngAfterViewInit(): void {
     this.initMapStyles();
@@ -258,6 +266,10 @@ export class GameComponent implements AfterViewInit {
     this.osmLayer.addTo(this.worldMap);
 
     const locations = [
+      // Fakultät Technik
+      // Fakultät Sozialwesen
+      // Fakultät Wirtschaft
+      // Campus Horb
       { name: "DHBW Stuttgart", id: "LE1", lat: 48.7840, lon: 9.1738 },
       { name: "Hauptbahnhof", id: "LE2", lat: 48.7842, lon: 9.1818 },
       { name: "Milaneo", id: "LE3", lat: 48.7895, lon: 9.1852 },

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import {faCircleInfo} from '@fortawesome/free-solid-svg-icons';
@@ -19,10 +19,10 @@ export class HomeComponent {
   public roundsToPlay: number = 6;
   public username: string | undefined;
 
-  constructor(private router: Router, private authService: AuthService) {
+  constructor(private router: Router, private authService: AuthService, private cdRef: ChangeDetectorRef) {
     this.authService.getUsername(localStorage.getItem('access_token') || '').then(username => {
       this.username = username;
-      console.log(`username=${this.username}`);
+      this.cdRef.detectChanges();
     });
   }
 
