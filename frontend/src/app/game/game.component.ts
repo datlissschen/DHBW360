@@ -40,6 +40,7 @@ export class GameComponent implements AfterViewInit {
   maxRounds: number = 1;
   cumulativeScore: number = 0
   username: string | undefined;
+  locationNotAvailable: boolean = false;
 
   @ViewChild('panorama') panoramaEl!: ElementRef;
   @ViewChild('popupOverlay') popupOverlayEl!: ElementRef;
@@ -266,28 +267,36 @@ export class GameComponent implements AfterViewInit {
     this.osmLayer.addTo(this.worldMap);
 
     const locations = [
-      // Fakultät Technik
-      // Fakultät Sozialwesen
-      // Fakultät Wirtschaft
-      // Campus Horb
-      { name: "DHBW Stuttgart", id: "LE1", lat: 48.7840, lon: 9.1738 },
-      { name: "Hauptbahnhof", id: "LE2", lat: 48.7842, lon: 9.1818 },
-      { name: "Milaneo", id: "LE3", lat: 48.7895, lon: 9.1852 },
-      { name: "Schlossplatz", id: "LE4", lat: 48.7781, lon: 9.1795 },
+      { name: "DHBW Stuttgart Fakultät Technik", id: "LE1", lat: 48.78268797542353, lon: 9.166966502976193 },
+      { name: "DHBW Stuttgart Fakultät Sozialwesen", id: "SOZIALWESEN", lat: 48.770304288576966, lon: 9.157861346588032 },
+      { name: "DHBW Stuttgart Fakultät Wirtschaft", id: "WIRTSCHAFT", lat: 48.77363959932411, lon: 9.170890916551944 },
+      { name: "DHBW Stuttgart Campus Horb", id: "HORB", lat: 48.44548420120876, lon: 8.696825707988424 },
     ];
 
     let activeMarker: any = null;
     locations.forEach(loc => {
-      const marker = L.marker([loc.lat, loc.lon], { icon: this.defaultIcon }).addTo(this.worldMap);
+      const marker = L.marker([loc.lat, loc.lon], { icon: this.defaultIcon })
+        .bindTooltip(loc.name, { permanent: true, direction: 'top', offset: [0, -30] })
+        .addTo(this.worldMap);
+
       marker.on('click', () => {
         if (activeMarker) activeMarker.setIcon(this.defaultIcon);
         marker.setIcon(this.activeIcon);
         activeMarker = marker;
         this.selectedLocation = loc.name;
         this.selectedLocationId = loc.id;
+
         this.updateStepStatus(this.status1El.nativeElement, `Ausgewählt: ${loc.name}`);
         this.step2El.nativeElement.classList.remove('disabled');
-        this.step2El.nativeElement.open = true;
+
+        this.locationNotAvailable = false;
+        this.cdRef.detectChanges();
+
+        if (this.step2El.nativeElement.open) {;
+          this.initFloorMap();
+        } else {
+          this.step2El.nativeElement.open = true;
+        }
       });
     });
   }
@@ -300,33 +309,69 @@ export class GameComponent implements AfterViewInit {
   }
 
   private updateFloorSideview(): void {
-    const imageWidth = 1000, imageHeight = 750, geoWidth = 801, geoHeight = 445;
-    const scaleX = imageWidth / geoWidth, scaleY = imageHeight / geoHeight;
-    const bounds: L.LatLngBoundsExpression = [[0, 0], [imageHeight, imageWidth]];
+    this.locationNotAvailable = false;
+    this.cdRef.detectChanges();
 
-    if (this.floorImageLayer) this.floorMap.removeLayer(this.floorImageLayer);
-    if (this.floorGeoLayer) this.floorMap.removeLayer(this.floorGeoLayer);
+    setTimeout(() => {
 
-    this.floorImageLayer = L.imageOverlay(`${environment.gameServiceBaseUrl}/img/sideview/${this.selectedLocationId}`, bounds).addTo(this.floorMap);
-    this.floorMap.fitBounds(bounds);
+      if (this.floorMap) {
+        this.floorMap.remove();
+        this.floorMap = null;
+        this.floorImageLayer = null;
+        this.floorGeoLayer = null;
+      }
 
-    this.http.get(`${environment.gameServiceBaseUrl}/geo-data/sideview/${this.selectedLocationId}`).subscribe((geoJson) => {
-      this.floorGeoLayer = L.geoJSON(geoJson as any, {
-        coordsToLatLng: (coords: number[]) => L.latLng(imageHeight + coords[1] * scaleY, coords[0] * scaleX),
-        style: this.defaultStyle,
-        onEachFeature: (feature: any, layer: any) => {
-          layer.on('click', () => {
-            if (this.lastFloorLayer) this.lastFloorLayer.setStyle(this.defaultStyle);
-            layer.setStyle(this.highlightStyle);
-            this.lastFloorLayer = layer;
-            this.selectedFloor = feature.properties.floor_id;
-            this.updateStepStatus(this.status2El.nativeElement, `Ausgewählt: ${this.selectedFloor}`);
-            this.step3El.nativeElement.classList.remove('disabled');
-            this.step3El.nativeElement.open = true;
-          });
+      this.floorMap = L.map(this.mapFloorEl.nativeElement, {
+        crs: L.CRS.Simple,
+        minZoom: -1
+      });
+
+      const imageWidth = 1000, imageHeight = 750;
+      const geoWidth = 801, geoHeight = 445;
+      const scaleX = imageWidth / geoWidth, scaleY = imageHeight / geoHeight;
+      const bounds: L.LatLngBoundsExpression = [[0, 0], [imageHeight, imageWidth]];
+
+      this.floorImageLayer = L.imageOverlay(
+        `${environment.gameServiceBaseUrl}/img/sideview/${this.selectedLocationId}`,
+        bounds
+      ).addTo(this.floorMap);
+
+      this.floorMap.fitBounds(bounds);
+
+      this.http.get(`${environment.gameServiceBaseUrl}/geo-data/sideview/${this.selectedLocationId}`).subscribe({
+        next: (geoJson) => {
+          if (!this.floorMap) return;
+
+          this.floorGeoLayer = L.geoJSON(geoJson as any, {
+            coordsToLatLng: (coords: number[]) => L.latLng(imageHeight + coords[1] * scaleY, coords[0] * scaleX),
+            style: this.defaultStyle,
+            onEachFeature: (feature: any, layer: any) => {
+              layer.on('click', () => {
+                if (this.lastFloorLayer) this.lastFloorLayer.setStyle(this.defaultStyle);
+                layer.setStyle(this.highlightStyle);
+                this.lastFloorLayer = layer;
+                this.selectedFloor = feature.properties.floor_id;
+                this.updateStepStatus(this.status2El.nativeElement, `Ausgewählt: ${this.selectedFloor}`);
+                this.step3El.nativeElement.classList.remove('disabled');
+                this.step3El.nativeElement.open = true;
+              });
+            }
+          }).addTo(this.floorMap);
+        },
+        error: (err) => {
+          console.error("Error loading sideview geo-data:", err);
+          if (err.status === 404) {
+            this.locationNotAvailable = true;
+
+            if (this.floorMap) {
+              this.floorMap.remove();
+              this.floorMap = null;
+            }
+            this.cdRef.detectChanges();
+          }
         }
-      }).addTo(this.floorMap);
-    });
+      });
+    }, 100);
   }
 
   private initRoomMap(): void {
