@@ -44,6 +44,7 @@ gameRouter.post('/check-answer', async (req: express.Request, res: express.Respo
     const correctRoom = game.rounds[game.currentRoundNumber-1].room;
     const roundScore = calculateScore(correctRoom, selectedLocationId, selectedFloorId, selectedRoomId);
     game.rounds[game.currentRoundNumber-1].score = roundScore;
+    game.rounds[game.currentRoundNumber-1].correctAnswer = correctAnswer;
     let gameEnd = game.currentRoundNumber == game.maxRounds;
     game.currentRoundNumber++;
     res.json({correctAnswer: correctAnswer, gameEnd: gameEnd, game: game});

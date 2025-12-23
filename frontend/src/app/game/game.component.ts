@@ -9,6 +9,8 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { GeoJSON } from 'leaflet';
 import {AuthService} from '../auth/auth.service';
+import {RoundResult} from '../round-result/round-result';
+import {MatDialog} from '@angular/material/dialog';
 
 interface IGameStartResponse {
   game: IGame;
@@ -16,6 +18,7 @@ interface IGameStartResponse {
 
 interface IGame {
   rounds: {
+    correctAnswer: boolean;
     roomImgURL: string;
     score: number;
   }[],
@@ -29,7 +32,7 @@ declare var L: any;
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RoundResult],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -83,7 +86,8 @@ export class GameComponent implements AfterViewInit {
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private roundResultDialog: MatDialog
   ) {
     this.authService.getUsername(localStorage.getItem('access_token') || '').then(username => {
       this.username = username;
@@ -180,20 +184,31 @@ export class GameComponent implements AfterViewInit {
       selectedRoomId: this.selectedRoom,
     }, {withCredentials: true}).subscribe({
       next: data => {
-        this.cumulativeScore += data.game.rounds[data.game.currentRoundNumber - 2].score;
+        const pointsThisRound = data.game.rounds[data.game.currentRoundNumber - 2].score;
+        this.cumulativeScore += pointsThisRound;
         this.cdRef.detectChanges();
 
-        alert(data.correctAnswer ? "Korrekt!" : "Falsch!");
+        const dialogRef = this.roundResultDialog.open(RoundResult, {
+          data: {
+            correctAnswer: data.correctAnswer,
+            pointsEarned: pointsThisRound,
+            gameEnd: data.gameEnd,
+            roundResults: data.gameEnd ? data.game.rounds : []
+          },
+          disableClose: true,
+          width: '400px'
+        });
 
-        if (data.gameEnd) {
-          alert("Spielende!");
-          this.router.navigate(["/"]);
-        } else {
-          this.currentRound = data.game.currentRoundNumber;
-          this.initPannellum(data.game.rounds[data.game.currentRoundNumber - 1].roomImgURL);
-          this.resetGameState();
-          this.cdRef.detectChanges();
-        }
+        dialogRef.afterClosed().subscribe(() => {
+          if (data.gameEnd) {
+            this.router.navigate(["/"]);
+          } else {
+            this.currentRound = data.game.currentRoundNumber;
+            this.initPannellum(data.game.rounds[data.game.currentRoundNumber - 1].roomImgURL);
+            this.resetGameState();
+            this.cdRef.detectChanges();
+          }
+        });
       },
       error: err => {
         console.error("Submit answer error:", err);

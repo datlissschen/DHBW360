@@ -19,6 +19,7 @@ export async function startGame(rounds: number, username: string): Promise<Game>
             room: room,
             floorNumber: room.floorNumber,
             roomImgURL: `img/room/${room.qualifiedName}`,
+            correctAnswer: undefined,
             score: undefined
         });
     }
@@ -28,9 +29,7 @@ export async function startGame(rounds: number, username: string): Promise<Game>
         currentRoundNumber: 1,
         rounds: roundsData
     };
-    console.log(`Set game object for user ${username}`);
     games.set(username, game)
-    console.log("1games=", games);
     return game;
 }
 
@@ -68,12 +67,6 @@ export function checkAnswer(game: Game, selectedLocationId: string, selectedFloo
     const correctLocationId = room.locationId;
     const correctFloorId = room.floorId;
     const correctRoomId = game.rounds[game.currentRoundNumber-1].room.qualifiedName;
-    console.log("correctLocationId", correctLocationId);
-    console.log("correctFloorId", correctFloorId);
-    console.log("correctRoomId", correctRoomId);
-    console.log("selectedLocationId", selectedLocationId);
-    console.log("selectedFloorId", selectedFloorId);
-    console.log("selectedRoomId", selectedRoomId);
     return correctLocationId == selectedLocationId && correctFloorId == selectedFloorId && correctRoomId == selectedRoomId;
 }
 
