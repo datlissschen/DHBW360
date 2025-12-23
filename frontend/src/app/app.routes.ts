@@ -3,6 +3,7 @@ import {HomeComponent} from './home/home.component';
 import {GameComponent} from './game/game.component';
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
+import {ImprintComponent} from './imprint/imprint.component';
 
 export const routes: Routes = [
   {
@@ -24,6 +25,11 @@ export const routes: Routes = [
     path: 'register',
     component: RegisterComponent,
     title: 'DHBW360 - Register',
+  },
+  {
+    path: 'imprint',
+    component: ImprintComponent,
+    title: 'DHBW360 - Impressum',
   },
   // Fallback-Route
   {

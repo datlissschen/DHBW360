@@ -1,1 +1,19 @@
-<p>imprint works!</p>
+<div class="imprint-container">
+  <h1>Impressum</h1>
+
+  <section>
+    <h2>Angaben gemäß § 5 TMG</h2>
+    <p>
+      {{ info.name }}<br>
+      {{ info.address }}<br>
+      {{ info.city }}
+    </p>
+  </section>
+
+  <section>
+    <h2>Kontakt</h2>
+    <p>
+      E-Mail: <a [href]="'mailto:' + info.email">{{ info.email }}</a>
+    </p>
+  </section>
+</div>

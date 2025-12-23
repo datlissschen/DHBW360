@@ -58,7 +58,7 @@ export class RegisterComponent implements OnInit {
         error: (err) => {
           this.isLoading = false;
 
-          if (err.status === 409) {
+          if (err.status === 400) {
             this.errorMessage = 'Dieser Benutzername ist bereits vergeben.';
           } else {
             this.errorMessage = 'Registrierung fehlgeschlagen. Bitte versuchen Sie es später erneut.';
