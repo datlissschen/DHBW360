@@ -121,6 +121,7 @@ DB_USER=<Username>
 DB_PASSWORD=<Password>
 DB_DATABASE=dhbw360
 EXPRESS_PORT=<Port for express server>
+HOST=<Address of the frontend service e.g. http://localhost:4200>
 
 ```
 

@@ -2,7 +2,7 @@ name: Code Analysis and build + deploy Frontend & Backend services
 
 on:
     push:
-        branches: ['dev']
+        branches: ['main']
     workflow_dispatch:
 
 jobs:
