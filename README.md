@@ -104,8 +104,8 @@ Diese Funktionen können in einem späteren Release oder als Erweiterung umgeset
 ---
 
 > 📘 Weitere Dokumente:
-> - [`docs/diagrams/C4-Diagram.md`](docs/diagrams/C4-Diagram.md) – C4-Modell
-> - [`docs/diagrams/Eventstorming.md`](docs/diagrams/Eventstorming.md) – Eventstorming
+> - [`docs/diagrams/C4-Diagram.pdf`](docs/diagrams/C4-Diagram.pdf) – C4-Modell
+> - [`docs/diagrams/Eventstorming.pdf`](docs/diagrams/Eventstorming.pdf) – Eventstorming
 > - [`docs/diagrams/usecase-diagram.svg`](docs/diagrams/usecase-diagram.svg) – Use-Case-Diagramm
 > - [`docs/geodata-documentation.md`](docs/geodata-documentation.md) – QGIS Digitization Workflow
 > - [`docs/technical-documentation.md`](docs/technical-documentation.md) – Technische Dokumentation
