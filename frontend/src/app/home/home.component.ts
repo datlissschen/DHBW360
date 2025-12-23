@@ -5,6 +5,8 @@ import {faCircleInfo} from '@fortawesome/free-solid-svg-icons';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {ScoreboardComponent} from '../scoreboard/scoreboard.component';
 import {AuthService} from '../auth/auth.service';
+import {MatDialog} from '@angular/material/dialog';
+import {InfoComponent} from '../info/info.component';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +21,7 @@ export class HomeComponent {
   public roundsToPlay: number = 6;
   public username: string | undefined;
 
-  constructor(private router: Router, private authService: AuthService, private cdRef: ChangeDetectorRef) {
+  constructor(private router: Router, private authService: AuthService, private cdRef: ChangeDetectorRef, public dialog: MatDialog) {
     this.authService.getUsername(localStorage.getItem('access_token') || '').then(username => {
       this.username = username;
       this.cdRef.detectChanges();
@@ -32,5 +34,11 @@ export class HomeComponent {
 
   goToLogin() {
     this.router.navigate(['/login']);
+  }
+
+  openInfo() {
+    this.dialog.open(InfoComponent, {
+      width: '600px',
+    })
   }
 }
