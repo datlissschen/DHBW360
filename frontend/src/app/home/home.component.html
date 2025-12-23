@@ -20,9 +20,11 @@
     </span>
 
     <div class="action-area">
-      <form (ngSubmit)="startGame()">
-        <label for="round-count">Anzahl der Runden: </label>
-        <input id="round-count" class="w-fit" name="round-count" type="number" min="1" max="10" value="6" [(ngModel)]="roundsToPlay">
+      <form (ngSubmit)="startGame()" class="flex flex-wrap" style="max-width: 100vw">
+        <span>
+          <label for="round-count">Anzahl der Runden: </label>
+          <input id="round-count" class="w-fit" name="round-count" type="number" min="1" max="10" value="6" [(ngModel)]="roundsToPlay">
+        </span>
         <button type="submit" class="start-button ml-5">Spiel starten</button>
       </form>
     </div>

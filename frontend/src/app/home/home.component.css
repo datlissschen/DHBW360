@@ -17,29 +17,28 @@
   overflow-x: hidden;
 }
 
-/* --- Header Bereich --- */
 .header {
   display: flex;
-  /* Nicht mehr space-between, sondern flex-start */
   justify-content: flex-start;
   align-items: center;
+  flex-wrap: wrap;
   padding: 1rem 2rem;
   border-bottom: 1px solid var(--border-light);
   background-color: var(--bg-light);
   position: relative;
   z-index: 10;
-  gap: 0.8rem; /* Standard-Abstand zwischen Logo und Info */
+  gap: 0.8rem;
 }
 
 .header .logo-container {
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  flex-shrink: 0; /* Verhindert, dass das Logo schrumpft */
+  flex-shrink: 0;
 }
 
 .header .logo-container .logo-image {
-  height: 80px; /* Kleineres Logo wie im Bild */
+  height: 80px;
   object-fit: contain;
 }
 
@@ -63,24 +62,25 @@
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius);
   transition: background-color 0.2s ease;
-  margin-left: 2rem; /* Abstand zum Logo */
+  margin-left: 2rem;
   flex-shrink: 0;
 }
+
 .info-button:hover {
   background-color: var(--bg-dark);
 }
+
 .info-button .info-icon {
   height: 20px;
   width: 20px;
   object-fit: contain;
 }
 
-/* Diese Area wird durch margin-left: auto ganz nach rechts geschoben */
 .header .action-area {
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  margin-left: auto; /* Magie: Schiebt diesen Block nach rechts */
+  margin-left: auto;
   flex-shrink: 0;
 }
 
@@ -98,11 +98,11 @@
   font-size: 0.95rem;
   text-align: center;
   color: var(--text-dark);
-  background-color: #fff; /* Sicherstellen, dass Input weiß ist */
+  background-color: #fff;
 }
 
 .header .start-button {
-  background-color: var(--primary-color); /* Roter Start-Button */
+  background-color: var(--primary-color);
   color: var(--text-light);
   padding: 0.7rem 1.5rem;
   border: none;
@@ -115,30 +115,26 @@
 }
 
 .header .start-button:hover {
-  background-color: var(--button-hover);
   transform: translateY(-2px);
 }
 
-/* WICHTIG: Scroll-Logik */
 .main-content-wrapper {
-  padding: 2rem; /* Padding ist jetzt hier */
-  overflow-y: auto; /* Scrollen ist jetzt hier */
+  padding: 2rem;
+  overflow-y: auto;
   flex-grow: 1;
-  height: 100%; /* Stellt sicher, dass der Wrapper den 1fr-Slot füllt */
-  box-sizing: border-box; /* Padding wird in Höhe eingerechnet */
+  height: 100%;
+  box-sizing: border-box;
 }
 
-/* Responsive Anpassungen */
 @media (max-width: 1024px) {
   .page-wrapper { border-radius: 0; box-shadow: none; }
   .header { padding: 1rem 1.5rem; }
-  .info-button { display: none; } /* Info-Button ausblenden, wird zu eng */
 }
 
 @media (max-width: 768px) {
   .header .logo-container .logo-text { display: none; }
   .header label, .header input { font-size: 0.85rem; }
-  .header input[type="number"] { width: 40px; padding: 0.4rem 0.6rem; }
+  .header input[type="number"] { padding: 0.4rem 0.6rem; }
   .header .start-button { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
   .main-content-wrapper { padding: 1rem; }
 }

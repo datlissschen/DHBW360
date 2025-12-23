@@ -1,128 +1,54 @@
-/* You can add global styles to this file, and also import other style files */
-
-/* In src/styles.css */
 @import url('tailwindcss');
-
 
 :root {
   --bg-dark: #f0f2f5;
   --bg-light: #ffffff;
+  --popup-bg-color: rgba(0, 0, 0, 0.6);
+  --popup-content-bg: var(--bg-dark);
+
   --text-dark: #333333;
   --text-light: #ffffff;
   --text-strong: #1a1a1a;
+  --text-primary: #1a1a1a;
+  --text-3xl: 1.875rem;
 
-  /* DHBW Farben */
   --primary-color: #930010;
   --link-highlight: #d3072a;
-  --button-hover: #b00521;
 
   --podium-1: #C30012;
   --podium-2: #5E5E5E;
   --podium-3: #999999;
 
-  /* Ränder und Schatten */
+  --border-color: #e0e0e0;
   --border-light: #e0e0e0;
-  --shadow: 0 2px 10px rgba(0,0,0,0.08);
   --border-radius: 8px;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 
-  --popup-bg-color: rgba(0, 0, 0, 0.6);
-  --popup-content-bg: var(--bg-dark);
+  --input-background: #ffffff;
+
+  --button-red: var(--primary-color);
+  --button-red-hover: #b00521;
+  --button-red-text: #ffffff;
 }
 
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  display: flex;
   width: 100vw;
-  font-family: 'Poppins', sans-serif;
-  color: var(--text-dark);
+  display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--bg-dark);
   overflow-x: hidden;
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-dark);
+  background-color: var(--bg-dark);
 }
 
-.button-blue, .button-green, .button-red, .button-yellow {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.button-blue {
-  background-color: var(--button-blue);
-  color: var(--button-blue-text);
-}
-
-.button-blue:hover {
-  background-color: var(--button-blue-hover);
-}
-
-.button-yellow {
-  background-color: var(--button-yellow);
-  color: var(--button-yellow-text);
-}
-
-.button-yellow:hover {
-  background-color: var(--button-yellow-hover);
-}
-
-.button-green {
-  background-color: var(--button-green);
-  color: var(--button-green-text);
-}
-
-.button-green:hover {
-  background-color: var(--button-green-hover);
-}
-
-.button-red {
-  background-color: var(--button-red);
-  color: white;
-}
-
-.button-red-hover {
-  background-color: var(--button-red-hover);
-}
-
-.button-red:hover {
-  background-color: var(--button-hover) !important;
-}
-
-.button-blue:hover, .button-red:hover, .button-green:hover, .button-yellow:hover {
-  transform: scale(1.03);
-}
-
-textarea, input:not([type='submit']) {
-  background: var(--input-background);
-  border: 1px solid var(--border-color);
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-}
-
-textarea:focus-visible, input:not([type='submit']):focus-visible {
-  border-color: #FFA500;
-  outline: none;
-}
-
-.error-box {
-  background-color: #fff5f5; /* Very light red background */
-  border-left: 4px solid var(--primary-color);
-  color: var(--primary-color);
-  padding: 0.75rem 1rem;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  animation: shake 0.4s ease-in-out; /* Optional attention grabber */
-}
-
-/* Optional: Makes the error pop when it appears */
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+app-root {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .page-headline {
@@ -133,8 +59,52 @@ textarea:focus-visible, input:not([type='submit']):focus-visible {
   margin-bottom: 2rem;
 }
 
-app-root {
-  display: block;
+.button-red {
+  padding: 0.5rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-weight: bold;
+  display: inline-block;
+  text-align: center;
+  background-color: var(--button-red);
+  color: var(--button-red-text);
+}
+
+.button-red:hover {
+  transform: scale(1.03);
+  background-color: var(--button-red-hover);
+}
+
+textarea, input:not([type='submit']) {
+  background: var(--input-background);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  color: var(--text-dark);
   width: 100%;
-  height: 100%;
+  box-sizing: border-box;
+}
+
+textarea:focus-visible, input:not([type='submit']):focus-visible {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.error-box {
+  background-color: #fff5f5;
+  border-left: 4px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
 }
