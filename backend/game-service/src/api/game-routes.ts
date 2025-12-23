@@ -1,32 +1,29 @@
 import express, {Router} from "express";
-import {calculateScore, checkAnswer, Game, getGameByUserId, saveGame, startGame, stopGame} from "@/game-manager";
+import {addScore, calculateScore, checkAnswer, getGameByUser, saveGame, startGame, stopGame} from "@/game-manager";
 import {StatusCodes} from 'http-status-codes';
+import {checkLogin} from "@/user-manager";
+import {Game} from "@/types/game";
 
 const gameRouter = Router();
 
 gameRouter.post('/start-game', async (req: express.Request, res: express.Response) => {
+    if (!req.body.rounds) res.status(StatusCodes.BAD_REQUEST).json({error: 'Attribute "rounds" not found in request body'});
     const rounds = Number(req.body.rounds);
-    const userId: string = req.body.userId ?? crypto.randomUUID();
-    const game = await startGame(rounds, userId);
-    res.send({userId: userId, game: game});
-})
-
-gameRouter.get('/test/correct-answer', async (req: express.Request, res: express.Response) => {
-    if (process.env.PRODUCTION === "true") {
-        res.status(StatusCodes.NOT_IMPLEMENTED).json({
-            error: "This endpoint is not enabled in production"
-        });
-        return;
+    const accessToken = req.body.accessToken;
+    console.log("start-game called with rounds=" + rounds + " and accessToken=" + accessToken);
+    let username: string | undefined;
+    if (accessToken) {
+        username = await checkLogin(accessToken);
+        if (!username) {
+            res.status(StatusCodes.UNAUTHORIZED).json({error: 'Access token is invalid'});
+            return;
+        }
+    } else {
+        username = crypto.randomUUID();
+        req.session.randomUsername = username;
     }
-    const userId = req.body.userId
-    const game = getGameByUserId(userId)!;
-    const room = game.rounds[game.currentRoundNumber-1].room
-    const correctAnswer = {
-        locationId: room.locationId,
-        floorId: room.floorId,
-        roomId: room.roomId,
-    }
-    res.json({correctAnswer: correctAnswer});
+    const game = await startGame(rounds, username);
+    res.send({username: username, game: game});
 })
 
 gameRouter.post('/check-answer', async (req: express.Request, res: express.Response) => {
@@ -39,40 +36,50 @@ gameRouter.post('/check-answer', async (req: express.Request, res: express.Respo
         });
         return;
     }
-    const data = checkRequest(req, res)
+    const data = await validateRequestAndGetGame(req, res);
     if (!data) { return }
-    const userId = data[0]
+    const username = data[0]
     const game = data[1]
     const correctAnswer = checkAnswer(game, selectedLocationId, selectedFloorId, selectedRoomId);
-    const correctRoom = game.rounds[game.currentRoundNumber].room;
+    const correctRoom = game.rounds[game.currentRoundNumber-1].room;
     const roundScore = calculateScore(correctRoom, selectedLocationId, selectedFloorId, selectedRoomId);
-    game.rounds[game.currentRoundNumber].score = roundScore;
-    saveGame(userId, game);
-    const {rounds, ...gameWithoutRounds} = game;
-    gameWithoutRounds.currentRoundNumber++
-    res.json({correctAnswer: correctAnswer, gameEnd: game.currentRoundNumber == game.maxRounds, game: gameWithoutRounds});
-    if (game.currentRoundNumber == game.maxRounds) {
-        stopGame(userId)
+    game.rounds[game.currentRoundNumber-1].score = roundScore;
+    game.rounds[game.currentRoundNumber-1].correctAnswer = correctAnswer;
+    let gameEnd = game.currentRoundNumber == game.maxRounds;
+    game.currentRoundNumber++;
+    res.json({correctAnswer: correctAnswer, gameEnd: gameEnd, game: game});
+    addScore(username, roundScore);
+    if (gameEnd) {
+        stopGame(username);
     } else {
-        game.currentRoundNumber++;
-        saveGame(userId, game)
+        saveGame(username, game);
     }
 })
 
-function checkRequest(req: express.Request, res: express.Response): [any, Game] | undefined {
-    const userId = req.body.userId;
-    if (!userId) {
-        res.sendStatus(StatusCodes.UNAUTHORIZED);
-        return undefined;
+async function validateRequestAndGetGame(req: express.Request, res: express.Response): Promise<[string, Game] | undefined> {
+    const accessToken = req.body.accessToken
+    let username: string | undefined;
+    if (accessToken) {
+        username = await checkLogin(accessToken);
+        if (!username) {
+            res.status(StatusCodes.UNAUTHORIZED).json({error: 'Access token is invalid'});
+            return undefined;
+        }
+    } else {
+        username = req.session.randomUsername;
+        if (!username) {
+            res.status(StatusCodes.UNAUTHORIZED).json({error: 'Random username in session is undefined'});
+            return undefined;
+        }
     }
-    const game = getGameByUserId(userId)
+    const game = getGameByUser(username)
     if (!game) {
         res.status(StatusCodes.NOT_FOUND).json({
-            error: "No game found with given user id"
+            error: `No game found with given username '${username}'`
         });
         return undefined;
     }
-    return [userId, game];
+    return [username, game];
 }
 
 export default gameRouter;

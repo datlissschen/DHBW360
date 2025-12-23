@@ -1,0 +1,61 @@
+<div class="p-4 bg-[var(--bg-light)] text-center">
+  <h2 mat-dialog-title class="!text-[var(--primary-color)] !font-bold !text-2xl !mb-4">
+    @if (data.gameEnd) {
+      Spielende
+    } @else {
+      Rundenergebnis
+    }
+  </h2>
+
+  <mat-dialog-content class="!text-[var(--text-dark)] space-y-4">
+    <div class="space-y-3">
+      <div class="text-lg text-[var(--text-strong)]">
+        @if (data.gameEnd) {
+          <table class="w-full mb-10">
+            <thead class="text-center">
+              <th>Runde</th>
+              <th>Ergebnis</th>
+              <th>Punkte</th>
+            </thead>
+            <tbody>
+              @for (round of data.roundResults; track $index) {
+                <tr>
+                  <td> {{ $index +1 }} </td>
+                  <td>
+                    @if (round.correctAnswer) {
+                      <span class="text-green-500">richtig</span>
+                    } @else {
+                      <span class="text-red-500">falsch</span>
+                    }
+                  </td>
+                  <td> {{ round.score }} </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        } @else {
+          Deine Auswahl war
+          @if (data.correctAnswer) {
+            <span class="text-green-500">richtig</span>
+          } @else {
+            <span class="text-red-500">falsch</span>
+          }
+
+          <p>
+            Erhaltene Punkte: <span class="font-bold">{{ data.pointsEarned }}</span>
+          </p>
+        }
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="center" class="!pb-4">
+    <button class="button-red" [mat-dialog-close]="true">
+      @if (data.gameEnd) {
+        Zur Bestenliste
+      } @else {
+        Nächste Runde starten
+      }
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -1,21 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-
-@Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class AppComponent {
-  title = 'dhbw360-app';
-}
-
-import { Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { GameComponent } from './game/game.component';
+import {Routes} from '@angular/router';
+import {HomeComponent} from './home/home.component';
+import {GameComponent} from './game/game.component';
+import {LoginComponent} from './login/login.component';
+import {RegisterComponent} from './register/register.component';
+import {ImprintComponent} from './imprint/imprint.component';
 
 export const routes: Routes = [
   {
@@ -28,7 +16,22 @@ export const routes: Routes = [
     component: GameComponent,
     title: 'DHBW360 - Spiel'
   },
-  // Fallback-Route: Leitet alles Unbekannte zur Home-Seite
+  {
+    path: 'login',
+    component: LoginComponent,
+    title: 'DHBW360 - Login',
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    title: 'DHBW360 - Register',
+  },
+  {
+    path: 'imprint',
+    component: ImprintComponent,
+    title: 'DHBW360 - Impressum',
+  },
+  // Fallback-Route
   {
     path: '**',
     redirectTo: ''

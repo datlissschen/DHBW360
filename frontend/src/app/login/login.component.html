@@ -1,0 +1,60 @@
+<div class="flex flex-col items-center justify-center min-h-screen w-full p-4">
+
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md border border-[var(--border-light)]">
+    <h1 class="page-headline">Login</h1>
+
+    @if (errorMessage) {
+      <div class="error-box mb-4">
+        <span class="text-sm font-semibold">{{ errorMessage }}</span>
+      </div>
+    }
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit(); $event.preventDefault()" class="flex flex-col gap-4">
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-bold opacity-80">Benutzername</label>
+        <input
+          type="text"
+          formControlName="username"
+          placeholder="Dein Benutzername" />
+        @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
+          <small class="text-xs text-red-600">
+            Benutzername ist erforderlich.
+          </small>
+        }
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-bold opacity-80">Passwort</label>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Dein Passwort" />
+        @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+          <small class="text-xs text-red-600">
+            Passwort ist erforderlich.
+          </small>
+        }
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="loginForm.invalid || isLoading"
+        class="button-red font-bold uppercase"
+        style="background-color: var(--primary-color);">
+        @if (!isLoading) {
+          <span>Anmelden</span>
+        } @else {
+          <span>Lädt...</span>
+        }
+      </button>
+
+    </form>
+
+    <div class="mt-6 text-center text-sm">
+      <span class="opacity-70">Noch kein Account?</span>
+      <a routerLink="/register" class="ml-1 font-semibold" style="color: var(--link-highlight);">Account erstellen</a>
+    </div>
+  </div>
+
+</div>

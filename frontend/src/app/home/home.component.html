@@ -1,20 +1,31 @@
 <div class="page-wrapper">
   <header class="header">
     <div class="logo-container">
-      <img src="assets/dhbw360_logo.png" alt="DHBW360 Logo" class="logo-image">
+      <img src="dhbw360_logo.png" alt="DHBW360 Logo" class="logo-image">
       <span class="logo-text">DHBW360</span>
     </div>
 
-    <button class="info-button">
-      <img src="assets/info_icon.png" alt="Informationen" class="info-icon">
+    <button class="info-button" (click)="openInfo()">
+      <fa-icon class="info-icon" alt="Informationen" [icon]="informationIcon"></fa-icon>
       Informationen
     </button>
 
+    <span class="m-auto">
+      @if (username) {
+        <span>Angemeldet als {{ username }}</span>
+      }
+      <button type="button" class="start-button ml-5" (click)="goToLogin()">
+        Login
+      </button>
+    </span>
+
     <div class="action-area">
-      <form (ngSubmit)="startGame()">
-        <label for="round-count">Anzahl der Runden: </label>
-        <input id="round-count" name="round-count" type="number" min="1" max="10" value="6" [(ngModel)]="roundsToPlay">
-        <button type="submit" class="start-button">Spiel starten</button>
+      <form (ngSubmit)="startGame()" class="flex flex-wrap" style="max-width: 100vw">
+        <span>
+          <label for="round-count">Anzahl der Runden: </label>
+          <input id="round-count" class="w-fit" name="round-count" type="number" min="1" max="10" value="6" [(ngModel)]="roundsToPlay">
+        </span>
+        <button type="submit" class="start-button ml-5">Spiel starten</button>
       </form>
     </div>
   </header>

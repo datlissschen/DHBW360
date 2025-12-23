@@ -1,0 +1,10 @@
+::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: var(--border-radius) !important;
+  background-color: var(--bg-light) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.mat-mdc-dialog-title {
+  display: block;
+  text-align: center;
+}

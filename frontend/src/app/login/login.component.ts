@@ -1,0 +1,52 @@
+import {ChangeDetectorRef, Component} from '@angular/core';
+import { Router } from '@angular/router';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../auth/auth.service';
+import { CommonModule } from '@angular/common';
+import {RouterModule} from '@angular/router';
+
+@Component({
+  selector: 'app-login',
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+})
+export class LoginComponent {
+  loginForm = new FormGroup({
+    username: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required])
+  });
+
+  errorMessage: string = '';
+  isLoading: boolean = false;
+
+  constructor(private authService: AuthService, private router: Router, private cdRef: ChangeDetectorRef) { }
+
+  onSubmit() {
+    if (this.loginForm.valid) {
+      this.isLoading = true;
+      this.errorMessage = '';
+
+      this.authService.login(this.loginForm.value).subscribe({
+        next: (response) => {
+          console.log('Login Success:', response);
+          // Store access_token
+          if (response.access_token) {
+            localStorage.setItem('access_token', response.access_token);
+          }
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          if (err.status === 401) {
+            this.errorMessage = 'Passwort oder Benutzername falsch';
+          } else {
+            this.errorMessage = 'Es ist ein Fehler beim Anmelden aufgetreten.';
+          }
+          this.isLoading = false;
+          this.cdRef.detectChanges();
+        }
+      });
+    }
+  }
+}
