@@ -54,15 +54,17 @@ A dedicated service for managing player results.
 
 ### Game API
 
-| Method | Endpoint | Description | File | Parameters                                                                                                        |
-| :--- | :--- | :--- | :--- |:------------------------------------------------------------------------------------------------------------------|
-| `POST` | `/game/start` | Initiates a new game. | `game-routes.ts` | AccessToken: string (optional)<br>rounds: int                                                                     |
-| `POST` | `/game/check-answer` | Frontend sends the room data selected by the user and checks if it is correct. Also starts the next round. | `game-routes.ts` | AccessToken: string (optional)<br>selectedLocationId: string<br>selectedFloorId: string<br>selectedRoomId: string |
-| `GET` | `/geodata/sideview/:locationId` | Returns geodata for a location side view. | `geodata-routes.ts` | locationId: string                                                                                                |
-| `GET` | `/geodata/floor/:floorId` | Returns geodata for a floor plan. | `geodata-routes.ts` | floorId: string                                                                                                   |
-| `GET` | `/img/room/:roomId` | Returns the panoramic image of a room. | `image-routes.ts` | roomId: string                                                                                                    |
-| `GET` | `/img/sideview/:locationId` | Returns the image of a location's side view. | `image-routes.ts` | locationId: string                                                                                                |
-| `GET` | `/img/floor/:floorId` | Returns the image of a floor plan. | `image-routes.ts` | floorId: string                                                                                                   |
+Logged-in users provide an accessToken, while not logged in ones do not. That is why accessToken is marked as optional.
+
+| Method | Endpoint | Description                                                                                                                 | File | Parameters                                                                                                        |
+| :--- | :--- |:----------------------------------------------------------------------------------------------------------------------------| :--- |:------------------------------------------------------------------------------------------------------------------|
+| `POST` | `/game/start` | Initiates a new game.                                                                                                       | `game-routes.ts` | AccessToken: string (optional)<br>rounds: int                                                                     |
+| `POST` | `/game/check-answer` | Frontend sends the room data selected by the user and this endpoint checks if it is correct. It also starts the next round. | `game-routes.ts` | AccessToken: string (optional)<br>selectedLocationId: string<br>selectedFloorId: string<br>selectedRoomId: string |
+| `GET` | `/geodata/sideview/:locationId` | Returns geodata for a location side view.                                                                                   | `geodata-routes.ts` | locationId: string                                                                                                |
+| `GET` | `/geodata/floor/:floorId` | Returns geodata for a floor plan.                                                                                           | `geodata-routes.ts` | floorId: string                                                                                                   |
+| `GET` | `/img/room/:roomId` | Returns the panoramic image of a room.                                                                                      | `image-routes.ts` | roomId: string                                                                                                    |
+| `GET` | `/img/sideview/:locationId` | Returns the image of a location's side view.                                                                                | `image-routes.ts` | locationId: string                                                                                                |
+| `GET` | `/img/floor/:floorId` | Returns the image of a floor plan.                                                                                          | `image-routes.ts` | floorId: string                                                                                                   |
 
 ### Score API
 

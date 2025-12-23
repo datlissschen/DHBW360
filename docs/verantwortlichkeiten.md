@@ -13,7 +13,7 @@ Leonie erstellte die Anmelde- und Registrierungsseiten. Sie implementierte die F
 ## Entwicklung des Backends
 **Verantwortlich:** Daniel Ziegler
 
-Daniel war verantwortlich für die Entwicklung des Backends der Campus App. Er implementierte die Serverlogik und die API-Endpunkte, die für die Kommunikation zwischen dem Frontend und dem Backend erforderlich sind. Daniel kümmerte sich um die Anbindung an die Datenbank, um die Speicherung und den Abruf von Spieldaten zu ermöglichen.
+Daniel war verantwortlich für die Entwicklung des Backends von DHBW360. Er implementierte die Serverlogik, Integration-Tests und die API-Endpunkte, die für die Kommunikation zwischen dem Frontend und dem Backend erforderlich sind. Er kümmerte sich um die Anbindung an die Datenbank, um die Speicherung und den Abruf von Spieldaten zu ermöglichen, und band die AWS S3 Cloud ein, um Bild- und Geodaten zentral zu verwalten.
 Die CI/CD-Pipeline wurde ebenfalls von Daniel eingerichtet, um automatisierte Tests durchzuführen und die Software auf das Produktivsystem zu deployen.
 
 ## Dokumentation und Diagramme

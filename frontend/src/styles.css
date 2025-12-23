@@ -80,7 +80,7 @@ html, body {
 
 .button-red {
   background-color: var(--button-red);
-  color: var(--button-red-text);
+  color: white;
 }
 
 .button-red-hover {
@@ -138,11 +138,3 @@ app-root {
   width: 100%;
   height: 100%;
 }
-
-
-
-
-
-
-
-
