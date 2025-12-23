@@ -87,6 +87,9 @@ export class GameComponent implements AfterViewInit {
   ) {
     this.authService.getUsername(localStorage.getItem('access_token') || '').then(username => {
       this.username = username;
+      if (!username) {
+        localStorage.removeItem("access_token");
+      }
       this.cdRef.detectChanges();
     });
   }
@@ -111,7 +114,11 @@ export class GameComponent implements AfterViewInit {
           this.initPannellum(data.game.rounds[0].roomImgURL);
           this.cdRef.markForCheck();
         },
-        error: err => console.error(err)
+        error: err => {
+          if (err.status == 401) {
+            this.router.navigate(["/login"]);
+          }
+        }
       });
     });
   }
@@ -188,7 +195,9 @@ export class GameComponent implements AfterViewInit {
           this.cdRef.detectChanges();
         }
       },
-      error: err => console.error(err)
+      error: err => {
+        console.error("Submit answer error:", err);
+      }
     });
     this.onClosePopup();
   }

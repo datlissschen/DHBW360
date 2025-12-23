@@ -24,6 +24,9 @@ export class HomeComponent {
   constructor(private router: Router, private authService: AuthService, private cdRef: ChangeDetectorRef, public dialog: MatDialog) {
     this.authService.getUsername(localStorage.getItem('access_token') || '').then(username => {
       this.username = username;
+      if (!username) {
+        localStorage.removeItem("access_token");
+      }
       this.cdRef.detectChanges();
     });
   }
