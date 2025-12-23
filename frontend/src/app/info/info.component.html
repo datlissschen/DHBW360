@@ -1,1 +1,40 @@
-<p>info works!</p>
+<div class="p-4 bg-[var(--bg-light)] text-center">
+  <h2 mat-dialog-title class="!text-[var(--primary-color)] !font-bold !text-2xl !mb-4">
+    Willkommen bei DHBW360
+  </h2>
+
+  <mat-dialog-content class="!text-[var(--text-dark)] space-y-4">
+    <div class="space-y-3">
+      <p class="text-lg font-semibold text-[var(--text-strong)]">
+        Willkommen bei <strong>DHBW360</strong>, einem interaktiven GeoGuesser-Spiel, das dein Wissen über die Duale Hochschule auf die Probe stellt.
+      </p>
+      <p>
+        Deine Aufgabe ist es, anhand von Bildern spezifische Räume den verschiedenen DHBW-Standorten zuzuordnen. Ob Vorlesungsräume, Bibliothek, Labor oder Foyer – jedes Foto birgt Hinweise auf seine Herkunft.
+      </p>
+    </div>
+
+    <hr class="w-1/2 mx-auto border-[var(--border-light)] my-6">
+
+    <div class="flex flex-col items-center">
+      <h3 class="text-sm uppercase font-bold text-[var(--text-strong)] mb-2">
+        So wird gespielt
+      </h3>
+      <ul class="list-disc list-inside text-left space-y-2 inline-block">
+        <li class="marker:text-[var(--primary-color)]"> Schau dir das gezeigte Raumbild genau an.</li>
+        <li class="marker:text-[var(--primary-color)]"> Wähle auf der Karte den Standort der DHBW aus.</li>
+        <li class="marker:text-[var(--primary-color)]"> Wähle das Stockwerk aus.</li>
+        <li class="marker:text-[var(--primary-color)]"> Entscheide dich für einen Raum und wähle ihn aus.</li>
+      </ul>
+    </div>
+
+    <div class="mt-6 pt-4 border-t border-[var(--border-light)] italic text-sm">
+      <strong>Viel Erfolg bei der Erkundung der DHBW-Standorte!</strong>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="center" class="!pb-4">
+    <button class="button-red" mat-dialog-close>
+      Zurück
+    </button>
+  </mat-dialog-actions>
+</div>
