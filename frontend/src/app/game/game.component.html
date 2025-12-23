@@ -5,9 +5,6 @@
     <div class="header-logo">
       <img src="dhbw360_logo_circle.png" alt="DHBW360 LogoComponent">
     </div>
-    @if (username) {
-      <span class="my-auto round-display">Angemeldet als {{ username }}</span>
-    }
   </div>
 
   <div class="game-info">
@@ -23,6 +20,9 @@
   <button class="nav-button" id="nav-left" title="Nach links drehen" (click)="onNavLeft()"></button>
   <button class="nav-button" id="nav-right" title="Nach rechts drehen" (click)="onNavRight()"></button>
 
+  @if (username) {
+    <span class="absolute bottom-10 left-10 flex gap-10 align-center my-auto round-display">Angemeldet als {{ username }}</span>
+  }
   <button class="map-pin-button" id="openPopupBtn" title="Standort auswählen" (click)="onOpenPopup()">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
   </button>
