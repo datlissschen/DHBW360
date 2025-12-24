@@ -50,16 +50,16 @@ A dedicated service for managing player results.
 
 ---
 
-## 3. API Interfaces (Endpoints)
+## 2. API Interfaces (Endpoints)
 
 ### Game API
 
-Logged-in users provide an accessToken, while not logged in ones do not. That is why accessToken is marked as optional.
+Logged-in users provide an accessToken, while unauthenticated users (or guests) do not. That is why accessToken is marked as optional.
 
 | Method | Endpoint | Description                                                                                                                 | File | Parameters                                                                                                        |
 | :--- | :--- |:----------------------------------------------------------------------------------------------------------------------------| :--- |:------------------------------------------------------------------------------------------------------------------|
 | `POST` | `/game/start` | Initiates a new game.                                                                                                       | `game-routes.ts` | AccessToken: string (optional)<br>rounds: int                                                                     |
-| `POST` | `/game/check-answer` | Frontend sends the room data selected by the user and this endpoint checks if it is correct. It also starts the next round. | `game-routes.ts` | AccessToken: string (optional)<br>selectedLocationId: string<br>selectedFloorId: string<br>selectedRoomId: string |
+| `POST` | `/game/check-answer` | Validates the user's selected room data and initiates the next round. | `game-routes.ts` | AccessToken: string (optional)<br>selectedLocationId: string<br>selectedFloorId: string<br>selectedRoomId: string |
 | `GET` | `/geodata/sideview/:locationId` | Returns geodata for a location side view.                                                                                   | `geodata-routes.ts` | locationId: string                                                                                                |
 | `GET` | `/geodata/floor/:floorId` | Returns geodata for a floor plan.                                                                                           | `geodata-routes.ts` | floorId: string                                                                                                   |
 | `GET` | `/img/room/:roomId` | Returns the panoramic image of a room.                                                                                      | `image-routes.ts` | roomId: string                                                                                                    |
@@ -68,15 +68,15 @@ Logged-in users provide an accessToken, while not logged in ones do not. That is
 
 ### Score API
 
-| Method | Endpoint | Description | File | Parameters |
-| :--- | :--- | :--- | :--- | :--- |
-| `GET` | `/score/top` | Returns a list of highest scores. Sorted descending from rank `min` to `max`. | `score-routes.ts` | min: int<br>max: int |
-| `POST` | `/score/get/:username` | Returns the score of a player. | `score-routes.ts` | username: string |
-| `GET` | `/score/add` | Adds a score value to a player. | `score-routes.ts` | authKey: string (Allowed only to be called by game-service, not by a player)<br>username: string<br>amount: int |
+| Method | Endpoint | Description | File | Parameters                                                                                                                    |
+| :--- | :--- | :--- | :--- |:------------------------------------------------------------------------------------------------------------------------------|
+| `GET` | `/score/top` | Returns a list of highest scores. Sorted descending from rank `min` to `max`. | `score-routes.ts` | min: int<br>max: int                                                                                                          |
+| `POST` | `/score/get/:username` | Returns the score of a player. | `score-routes.ts` | username: string                                                                                                              |
+| `GET` | `/score/add` | Adds a score value to a player. | `score-routes.ts` | authKey: string (Internal use only. Game-service has to authenticate to use this endpoint)<br>username: string<br>amount: int |
 
 ---
 
-## 4. Data Model & Assets
+## 3. Data Model & Assets
 
 ### Data Model
 
@@ -92,7 +92,7 @@ The Game-Service downloads all static files from the S3 Cloud at startup and sav
 
 ---
 
-## 5. Setup & Deployment
+## 4. Setup & Deployment
 
 ### Prerequisites
 
@@ -181,13 +181,13 @@ DHBW360/
 
 ### Testing
 
-The project uses Vitest for integration tests in the Game-Service. These tests simulate an exemplary game flow with various HTTP requests.
+The project uses Vitest for integration tests in the Game-Service. These tests simulate a typical game flow with various HTTP requests.
 
 To run the tests: Navigate to the `DHBW360/backend/game-service` folder and run `npm run test`.
 
 ---
 
-## 6. Code Quality & Standards
+## 5. Code Quality & Standards
 
 * **TypeScript:** The entire project is typed, resulting in high maintainability and fewer runtime errors.
 * **Modular Structure:** Clear separation of routes (API), managers (logic), and technical services (S3, DB). This separates component responsibilities and increases clarity.

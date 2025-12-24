@@ -19,4 +19,4 @@ Die CI/CD-Pipeline wurde ebenfalls von Daniel eingerichtet, um automatisierte Te
 ## Dokumentation und Diagramme
 **Verantwortlich:** Leonie Reusch
 
-Leonie war verantwortlich für die Digitalisierung der verschiedenen Diagramme zur Visualisierung der Systemarchitektur und der Anforderungen. Die Diagramme wurden mit dem gesamten Team in der Vorlesung erarbeitet. Außerdem kümmerte sie sich um die Aufnahmen und das Zuschneiden der Raumbilder, sowie die Erstellung der Geodateien für die Etagenpläne.
+Leonie war verantwortlich für die Digitalisierung der verschiedenen Diagramme zur Visualisierung der Systemarchitektur und der Anforderungen. Die Diagramme wurden mit dem gesamten Team in der Vorlesung erarbeitet. Außerdem kümmerte sie sich um die Aufnahmen und das Zuschneiden der Raumbilder sowie die Erstellung der Geodateien für die Etagenpläne.
