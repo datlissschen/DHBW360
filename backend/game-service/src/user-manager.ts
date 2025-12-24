@@ -4,6 +4,5 @@ export async function checkLogin(token: string): Promise<string | undefined> {
                 method: 'GET'
             });
     const json: {valid: boolean, user: string | undefined} = await res.json();
-    console.log("json=" + JSON.stringify(json));
     return json.valid ? json.user : undefined;
 }

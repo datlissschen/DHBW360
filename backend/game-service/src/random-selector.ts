@@ -1,4 +1,5 @@
-import {availableRooms, Room} from "@/room-manager";
+import {availableRooms} from "@/room-manager";
+import {Room} from "@/types/room";
 
 export function selectRandomRooms(rounds: number) {
     const allRooms = Array.from(availableRooms.values())

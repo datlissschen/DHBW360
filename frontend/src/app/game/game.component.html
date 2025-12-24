@@ -23,7 +23,7 @@
   @if (username) {
     <span class="absolute bottom-10 left-10 flex gap-10 align-center my-auto round-display">Angemeldet als {{ username }}</span>
   }
-  <button class="map-pin-button" id="openPopupBtn" title="Standort auswählen" (click)="onOpenPopup()">
+  <button class="map-pin-button button-red" id="openPopupBtn" title="Standort auswählen" (click)="onOpenPopup()">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
   </button>
 </div>
@@ -42,10 +42,7 @@
           <span class="step-status" id="status-step-1" #status1>Nicht ausgewählt</span>
         </summary>
         <div class="step-content">
-          <div class="map-controls">
-            <button class="map-type-button active" data-map="world" data-type="karte">Karte</button>
-            <button class="map-type-button" data-map="world" data-type="satellit">Satellit</button>
-          </div>
+          <p>Wähle den DHBW-Standort aus.</p>
           <div id="map-world" class="map-container" #mapWorld></div>
         </div>
       </details>
@@ -81,6 +78,6 @@
       </details>
     </div>
 
-    <button class="submit-button" id="submitButton" (click)="onSubmit()">Weiter</button>
+    <button class="button-red w-fit mt-10 ml-auto" id="submitButton" (click)="onSubmit()">Weiter</button>
   </div>
 </div>

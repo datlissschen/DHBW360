@@ -6,7 +6,7 @@
   padding: 2rem;
   flex-grow: 1;
   text-align: center;
-  overflow-y: auto; /* Scrollen, falls Inhalt zu groß */
+  overflow-y: auto;
 }
 .game-view h2 {
   font-size: 2rem;
@@ -35,7 +35,6 @@
   transform: translateY(-2px);
 }
 
-/* --- Responsive Anpassungen --- */
 @media (max-width: 1024px) {
   .page-wrapper {
     border-radius: 0;
@@ -59,23 +58,20 @@
   height: 100%;
 }
 
-/* --- Overlay für alle UI-Elemente --- */
 .ui-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none; /* Lässt Klicks zur 360°-Steuerung durch */
+  pointer-events: none;
   z-index: 10;
 }
 
-/* UI-Elemente müssen Klicks empfangen */
 .ui-overlay > * {
   pointer-events: all;
 }
 
-/* --- Header-LogoComponent (Oben Links) --- */
 .header-logo {
   margin: 2rem 0 2rem 2rem;
   background-color: var(--bg-light);
@@ -93,16 +89,16 @@
   border-radius: 50%;
 }
 
-/* --- Spiel-Infos (Oben Rechts) --- */
 .game-info {
   position: absolute;
   top: 2rem;
-  right: 2rem;
+  right: 3rem;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 1rem;
 }
+
 .round-display {
   background-color: var(--primary-color);
   color: var(--text-light);
@@ -111,6 +107,7 @@
   font-weight: 600;
   box-shadow: var(--shadow);
 }
+
 .score-display {
   background-color: var(--primary-color);
   color: var(--text-light);
@@ -125,24 +122,25 @@
   line-height: 1.2;
   box-shadow: var(--shadow);
 }
+
 .score-display .points {
   font-size: 1.5rem;
   font-weight: 700;
 }
 
-/* --- Navigations-Buttons --- */
 .nav-button {
   position: absolute;
   width: 60px;
   height: 60px;
-  background-color: rgba(195, 0, 18, 0.7); /* Rotes Dreieck, leicht transparent */
+  background-color: rgba(195, 0, 18, 0.7);
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* Standard Dreieck (nach oben) */
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
+
 .nav-button:hover {
-  background-color: rgba(147, 0, 16, 1); /* Solides Rot bei Hover */
+  background-color: rgba(147, 0, 16, 1);
 }
 
 #nav-up {
@@ -150,60 +148,49 @@
   left: 50%;
   transform: translate(-50%, -150px);
 }
+
 #nav-down {
   bottom: 50%;
   left: 50%;
   transform: translate(-50%, 150px) rotate(180deg);
 }
+
 #nav-left {
   top: 50%;
   left: 2rem;
   transform: translateY(-50%) rotate(-90deg);
 }
+
 #nav-right {
   top: 50%;
   right: 2rem;
   transform: translateY(-50%) rotate(90deg);
 }
 
-/* --- Map-Pin Button (Unten Rechts) --- */
 .map-pin-button {
   position: absolute;
   bottom: 2rem;
-  right: 2rem;
-  background-color: var(--primary-color);
-  color: var(--text-light);
+  right: 3rem;
   width: 80px;
   height: 80px;
-  border: none;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  box-shadow: var(--shadow);
-  transition: background-color 0.2s ease;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.map-pin-button:hover {
-  background-color: var(--button-hover);
-}
+
 .map-pin-button svg {
   width: 50px;
   height: 50px;
   fill: var(--text-light);
 }
 
-/* =============================================
- === POPUP STYLES (Kopiert von vorheriger Antwort) ===
- =============================================
-*/
 .popup-overlay {
   position: fixed; top: 0; left: 0;
   width: 100%; height: 100%;
   background-color: var(--popup-bg-color);
   display: flex; justify-content: center; align-items: center;
   z-index: 1000;
-  display: none; /* Standardmäßig ausgeblendet */
+  display: none;
 }
 
 .popup-content {
@@ -222,10 +209,12 @@
   display: flex; justify-content: space-between; align-items: flex-start;
   margin-bottom: 1.5rem;
 }
+
 .popup-header h2 {
   font-size: 1.8rem; font-weight: 700;
   color: var(--primary-color); margin: 0;
 }
+
 .close-button {
   background: none; border: none;
   font-size: 2.5rem; line-height: 1;
@@ -233,6 +222,7 @@
   position: absolute; top: 1.5rem; right: 1.5rem;
   transition: color 0.2s ease;
 }
+
 .close-button:hover { color: var(--primary-color); }
 
 .steps-container {
@@ -242,7 +232,6 @@
 }
 
 .step {
-  background-color: var(--step-bg);
   border-radius: var(--border-radius);
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow);
@@ -255,6 +244,7 @@
   list-style: none;
   transition: background-color 0.2s ease;
 }
+
 .step-header:hover {
   background-color: var(--bg-dark);
 }
@@ -265,6 +255,7 @@
   opacity: 0.6;
   pointer-events: none;
 }
+
 .step.disabled { pointer-events: none; }
 .step.disabled > .step-content { display: none; }
 
@@ -275,13 +266,11 @@
 
 .step-status {
   font-size: 0.9rem; font-weight: 600;
-  color: var(--text-medium);
 }
 .step-status.selected { color: var(--primary-color); }
 
 .step-header::after {
   content: '▼'; font-size: 0.8rem;
-  color: var(--text-medium);
   transition: transform 0.2s ease;
 }
 
@@ -296,7 +285,7 @@
 }
 
 .map-container {
-  width: 100%; height: 350px;
+  width: 100%; height: 380px;
   border-radius: var(--border-radius);
   border: 1px solid var(--border-light);
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
@@ -305,6 +294,7 @@
 .map-controls {
   display: flex; align-items: center; gap: 1.5rem;
 }
+
 .map-controls button {
   background-color: var(--bg-light);
   border: 1px solid var(--border-light);
@@ -313,28 +303,12 @@
   font-weight: 600; color: var(--text-dark);
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
+
 .map-controls button.active,
 .map-controls button:hover {
   background-color: var(--primary-color);
   color: var(--text-light);
   border-color: var(--primary-color);
-}
-
-.submit-button {
-  align-self: flex-end;
-  background-color: var(--link-highlight);
-  color: var(--text-light);
-  padding: 0.8rem 2.5rem; border: none;
-  border-radius: var(--border-radius);
-  font-size: 1.1rem; font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: var(--shadow);
-  margin-top: 1.5rem;
-}
-.submit-button:hover {
-  background-color: var(--button-hover);
-  transform: translateY(-2px);
 }
 
 .geojson-polygon-highlight {
@@ -352,7 +326,6 @@
   box-shadow: var(--shadow);
   border-radius: var(--border-radius);
   display: grid;
-  /* Layout: Inhalt (füllt), Footer (auto) */
   grid-template-rows: 1fr auto;
   grid-template-columns: 1fr;
   overflow: hidden;

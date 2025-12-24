@@ -1,9 +1,9 @@
 import {selectRandomRooms} from "@/random-selector";
 import {ensureImageFile} from "@/image-service";
-import {Room} from "./room-manager";
 import {Game} from "@/types/game";
 import {Round} from "@/types/round";
 import {games} from './game-store';
+import {Room} from "@/types/room";
 
 export async function startGame(rounds: number, username: string): Promise<Game> {
     const randomRooms = selectRandomRooms(rounds)
@@ -34,7 +34,6 @@ export async function startGame(rounds: number, username: string): Promise<Game>
 }
 
 export function getGameByUser(username: string) {
-    console.log("games=", games);
     return games.get(username);
 }
 
@@ -43,7 +42,6 @@ export function saveGame(username: string, game: Game) {
 }
 
 export function stopGame(username: string) {
-    console.log(`Stop game for ${username}`);
     games.delete(username);
 }
 
@@ -59,7 +57,9 @@ export function addScore(username: string, amount: number) {
             amount: amount,
         })
     }).then(res => res.json())
-    .then(json => console.log(json));
+    .then(json => {
+        console.log("Response from score-service: ", json);
+    });
 }
 
 export function checkAnswer(game: Game, selectedLocationId: string, selectedFloorId: string, selectedRoomId: string) {

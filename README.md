@@ -6,16 +6,16 @@
 
 ### a. Beschreibung
 
-DHBW360 ist einem interaktives GeoGuesser-Spiel, das dein Wissen über die Duale Hochschule auf die Probe stellt.
+DHBW360 ist ein interaktives GeoGuesser-Spiel, das das Wissen Wissen der Spieler über die Duale Hochschule auf die Probe stellt.
 Die Aufgabe der Spieler ist es, anhand von Bildern spezifische Räume den verschiedenen DHBW-Standorten zuzuordnen.
 
 ### b. Stakeholder
 
-| Stakeholder               | Beschreibung                                 | Ziel / Interesse                                      |
-|---------------------------|----------------------------------------------|-------------------------------------------------------|
-| 🧑‍🎓 **Studierende**     | Hauptnutzende des Spiels                     | Campus kennenlernen & andere Studierende herausfordern |
-| 🏫 **DHBW Stuttgart**   | Sichtbarkeit ihrer Veranstaltungen                     | Studierende lernen Campus kennen, Vielfalt der DHBW vermitteln
-| 🧑‍💻 **Entwicklungsteam** | Studentisches Projektteam                    | Umsetzung eines durchgängigen Softwareprojekts        |
+| Stakeholder               | Beschreibung              | Ziel / Interesse                                      |
+|---------------------------|---------------------------|-------------------------------------------------------|
+| 🧑‍🎓 **Studierende**     | Hauptnutzende des Spiels  | Campus kennenlernen & andere Studierende herausfordern |
+| 🏫 **DHBW Stuttgart**   | Betreiber des Spiels      | Studierende lernen Campus kennen, Vielfalt der DHBW vermitteln
+| 🧑‍💻 **Entwicklungsteam** | Studentisches Projektteam | Umsetzung eines durchgängigen Softwareprojekts        |
 
 ---
 

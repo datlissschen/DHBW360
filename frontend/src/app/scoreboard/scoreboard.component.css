@@ -2,20 +2,16 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  /* Padding und overflow-y wurden entfernt.
-    Das wird jetzt von .main-content-wrapper in home.component.css gesteuert.
-  */
 }
 
 h1 {
-  font-size: 2.2rem; /* Kleinere H1 */
+  font-size: 2.2rem;
   font-weight: 700;
   color: var(--text-strong);
   text-align: center;
   margin-top: 0;
 }
 
-/* --- Top 3 Spieler (Podium) --- */
 .top-3-players {
   display: flex;
   justify-content: center;
@@ -39,7 +35,6 @@ h1 {
   color: var(--text-light);
 }
 
-/* Farben kommen jetzt aus :root in styles.css */
 .player-podium-card.rank-1 {
   background-color: var(--podium-1);
   height: 100%;
@@ -61,28 +56,27 @@ h1 {
   font-weight: 700;
   line-height: 1;
   margin-bottom: 0.4rem;
-  text-shadow: none; /* Kein Textschatten laut Bild */
+  text-shadow: none;
 }
 
 .player-podium-card .user-info {
-  font-weight: 500; /* Dünnere Schrift */
-  text-shadow: none; /* Kein Textschatten laut Bild */
+  font-weight: 500;
+  text-shadow: none;
 }
 .player-podium-card .user-info .name {
   margin-bottom: 0.1rem;
   word-break: break-word;
 }
 
-/* --- Tabelle der weiteren Spieler --- */
 .player-table-container {
   background-color: var(--bg-light);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
-  flex-grow: 1; /* Wichtig für Flex-Layout */
-  overflow-y: auto; /* Tabelle scrollt intern, wenn nötig */
+  flex-grow: 1;
+  overflow-y: auto;
   overflow-x: auto;
   position: relative;
-  border: 1px solid var(--border-light); /* Leichter Rahmen wie im Bild */
+  border: 1px solid var(--border-light);
 }
 
 .player-table {
@@ -93,10 +87,10 @@ h1 {
 
 .player-table th {
   padding: 0.8rem 1.2rem;
-  font-weight: 600; /* Weniger fett */
-  color: var(--text-dark); /* Dunkler Text, nicht Rot */
+  font-weight: 600;
+  color: var(--text-dark);
   background-color: var(--bg-light);
-  border-bottom: 1px solid var(--border-light); /* Hellere Linie */
+  border-bottom: 1px solid var(--border-light);
   position: sticky; top: 0; z-index: 5;
 }
 
@@ -108,13 +102,12 @@ h1 {
 .player-table tbody tr:last-child td { border-bottom: none; }
 .player-table tbody tr:hover { background-color: var(--bg-dark); transition: background-color 0.2s ease; }
 
-/* Responsive Anpassungen für Scoreboard */
 @media (max-width: 1024px) {
   h1 { font-size: 2rem; }
   .top-3-players { height: auto; gap: 0.5rem; margin-top: 1rem; flex-direction: column; align-items: center;}
   .player-podium-card { width: 80% !important; margin-bottom: 0.5rem; }
   .player-podium-card.rank-1, .player-podium-card.rank-2, .player-podium-card.rank-3 {
-    height: 80px; width: 80% !important; /* Wichtig, um Desktop-Größe zu überschreiben */
+    height: 80px; width: 80% !important;
     flex-direction: row; justify-content: flex-start; align-items: center;
     gap: 1.5rem; padding: 1rem 1.5rem;
   }

@@ -1,11 +1,10 @@
 import supertestSession from 'supertest-session';
-import {beforeAll, afterAll, describe, expect, it} from 'vitest';
+import {afterAll, beforeAll, describe, expect, it} from 'vitest';
 import expressApp from '../api/express-app';
 import {loadAllRooms} from "@/room-manager";
 import dotenv from 'dotenv';
 import {downloadAllFiles} from "@/s3";
 import nock from 'nock';
-import {getUserScore} from "../../../score-service/src/score-manager";
 
 dotenv.config({path: `./game-service/.env`});
 

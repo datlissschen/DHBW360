@@ -52,7 +52,7 @@ export async function downloadFile(key: string) {
     const { Body } = await client.send(getCommand);
 
     const localPath = path.join(downloadDir, key);
-    console.log("downloaded to path ", localPath);
+    console.log("Downloaded file to path ", localPath);
 
     fs.mkdirSync(path.dirname(localPath), { recursive: true });
 

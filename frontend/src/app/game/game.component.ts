@@ -32,7 +32,7 @@ declare var L: any;
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, RoundResult],
+  imports: [CommonModule],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -63,19 +63,17 @@ export class GameComponent implements AfterViewInit {
   private worldMap: any;
   private floorMap: any;
   private roomMap: any;
+  private markerLayer: any;
 
   private selectedLocation: string | null = null;
   private selectedLocationId: string | null = null;
   private selectedFloor: string | null = null;
   private selectedRoom: string | null = null;
 
-  private floorImageLayer?: any;
-  private floorGeoLayer?: any;
   private lastFloorLayer: any = null;
   private lastRoomLayer: any = null;
 
   private osmLayer: any;
-  private satelliteLayer: any;
   private defaultIcon: any;
   private activeIcon: any;
   private highlightStyle: any;
@@ -242,7 +240,6 @@ export class GameComponent implements AfterViewInit {
 
   private initMapStyles(): void {
     this.osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
-    this.satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
 
     this.defaultIcon = L.icon({
       iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -283,46 +280,58 @@ export class GameComponent implements AfterViewInit {
   }
 
   private initWorldMap(): void {
-    if (this.worldMap) {
-      this.worldMap.invalidateSize();
-      return;
+    if (!this.worldMap) {
+      this.worldMap = L.map(this.mapWorldEl.nativeElement).setView([48.7758, 9.1629], 13);
+      this.osmLayer.addTo(this.worldMap);
+      this.markerLayer = L.layerGroup().addTo(this.worldMap);
     }
-    this.worldMap = L.map(this.mapWorldEl.nativeElement).setView([48.7758, 9.1829], 13);
-    this.osmLayer.addTo(this.worldMap);
 
-    const locations = [
-      { name: "DHBW Stuttgart Fakultät Technik", id: "LE1", lat: 48.78268797542353, lon: 9.166966502976193 },
-      { name: "DHBW Stuttgart Fakultät Sozialwesen", id: "SOZIALWESEN", lat: 48.770304288576966, lon: 9.157861346588032 },
-      { name: "DHBW Stuttgart Fakultät Wirtschaft", id: "WIRTSCHAFT", lat: 48.77363959932411, lon: 9.170890916551944 },
-      { name: "DHBW Stuttgart Campus Horb", id: "HORB", lat: 48.44548420120876, lon: 8.696825707988424 },
-    ];
+    setTimeout(() => {
+      this.worldMap.invalidateSize();
 
-    let activeMarker: any = null;
-    locations.forEach(loc => {
-      const marker = L.marker([loc.lat, loc.lon], { icon: this.defaultIcon })
-        .bindTooltip(loc.name, { permanent: true, direction: 'top', offset: [0, -30] })
-        .addTo(this.worldMap);
+      this.markerLayer.clearLayers();
 
-      marker.on('click', () => {
-        if (activeMarker) activeMarker.setIcon(this.defaultIcon);
-        marker.setIcon(this.activeIcon);
-        activeMarker = marker;
-        this.selectedLocation = loc.name;
-        this.selectedLocationId = loc.id;
+      const locations = [
+        { name: "DHBW Stuttgart Fakultät Technik", id: "LE1", lat: 48.78268797542353, lon: 9.166966502976193 },
+        { name: "DHBW Stuttgart Fakultät Sozialwesen", id: "SOZIALWESEN", lat: 48.770304288576966, lon: 9.157861346588032 },
+        { name: "DHBW Stuttgart Fakultät Wirtschaft", id: "WIRTSCHAFT", lat: 48.77363959932411, lon: 9.170890916551944 },
+        { name: "DHBW Stuttgart Campus Horb", id: "HORB", lat: 48.44548420120876, lon: 8.696825707988424 },
+      ];
 
-        this.updateStepStatus(this.status1El.nativeElement, `Ausgewählt: ${loc.name}`);
-        this.step2El.nativeElement.classList.remove('disabled');
+      let activeMarker: any = null;
 
-        this.locationNotAvailable = false;
-        this.cdRef.detectChanges();
+      locations.forEach(loc => {
+        const marker = L.marker([loc.lat, loc.lon], { icon: this.defaultIcon })
+          .bindTooltip(loc.name, {
+            permanent: true,
+            direction: 'top',
+            offset: [0, -30]
+          });
 
-        if (this.step2El.nativeElement.open) {;
-          this.initFloorMap();
-        } else {
-          this.step2El.nativeElement.open = true;
-        }
+        marker.on('click', () => {
+          if (activeMarker) activeMarker.setIcon(this.defaultIcon);
+          marker.setIcon(this.activeIcon);
+          activeMarker = marker;
+          this.selectedLocation = loc.name;
+          this.selectedLocationId = loc.id;
+
+          this.updateStepStatus(this.status1El.nativeElement, `Ausgewählt: ${loc.name}`);
+          this.step2El.nativeElement.classList.remove('disabled');
+
+          this.locationNotAvailable = false;
+          this.cdRef.detectChanges();
+
+          if (this.step2El.nativeElement.open) {
+            this.initFloorMap();
+          } else {
+            this.step2El.nativeElement.open = true;
+          }
+        });
+
+        this.markerLayer.addLayer(marker);
       });
-    });
+
+    }, 100);
   }
 
   private initFloorMap(): void {
@@ -341,8 +350,6 @@ export class GameComponent implements AfterViewInit {
       if (this.floorMap) {
         this.floorMap.remove();
         this.floorMap = null;
-        this.floorImageLayer = null;
-        this.floorGeoLayer = null;
       }
 
       this.floorMap = L.map(this.mapFloorEl.nativeElement, {
@@ -355,7 +362,7 @@ export class GameComponent implements AfterViewInit {
       const scaleX = imageWidth / geoWidth, scaleY = imageHeight / geoHeight;
       const bounds: L.LatLngBoundsExpression = [[0, 0], [imageHeight, imageWidth]];
 
-      this.floorImageLayer = L.imageOverlay(
+      L.imageOverlay(
         `${environment.gameServiceBaseUrl}/img/sideview/${this.selectedLocationId}`,
         bounds
       ).addTo(this.floorMap);
@@ -366,7 +373,7 @@ export class GameComponent implements AfterViewInit {
         next: (geoJson) => {
           if (!this.floorMap) return;
 
-          this.floorGeoLayer = L.geoJSON(geoJson as any, {
+          L.geoJSON(geoJson as any, {
             coordsToLatLng: (coords: number[]) => L.latLng(imageHeight + coords[1] * scaleY, coords[0] * scaleX),
             style: this.defaultStyle,
             onEachFeature: (feature: any, layer: any) => {
@@ -414,7 +421,7 @@ export class GameComponent implements AfterViewInit {
 
       this.roomMap = L.map(this.mapRoomEl.nativeElement, {
         crs: L.CRS.Simple,
-        minZoom: -2
+        minZoom: -1
       });
 
       const bounds: L.LatLngBoundsExpression = [[0, 0], [h, w]];

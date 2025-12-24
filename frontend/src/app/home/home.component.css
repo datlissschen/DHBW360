@@ -126,6 +126,18 @@
   box-sizing: border-box;
 }
 
+::ng-deep .marker-label-fix {
+  margin-top: -45px !important; /* Wert anpassen, je nach Icon-Höhe */
+  background-color: white;       /* Optional: Damit man es besser liest */
+  border: 1px solid #ccc;        /* Optional */
+  position: absolute;            /* Zur Sicherheit */
+}
+
+/* Optional: Den kleinen Pfeil unten am Tooltip ausblenden, falls er jetzt komisch aussieht */
+::ng-deep .marker-label-fix::before {
+  display: none;
+}
+
 @media (max-width: 1024px) {
   .page-wrapper { border-radius: 0; box-shadow: none; }
   .header { padding: 1rem 1.5rem; }

@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {NgTemplateOutlet} from '@angular/common';
 
-interface IScoreEntry {
+interface ScoreEntry {
   username: string;
   score: number;
 }
@@ -20,13 +20,13 @@ interface IScoreEntry {
 })
 export class ScoreboardComponent implements OnInit {
 
-  top3: IScoreEntry[] = [];
-  top4to10: IScoreEntry[] = [];
+  top3: ScoreEntry[] = [];
+  top4to10: ScoreEntry[] = [];
 
   constructor(private http: HttpClient, private cdr: ChangeDetectorRef)  { }
 
   ngOnInit() {
-    this.http.get<{topScores: IScoreEntry[]}>(`${environment.scoreServiceBaseUrl}/score/top`, {
+    this.http.get<{topScores: ScoreEntry[]}>(`${environment.scoreServiceBaseUrl}/score/top`, {
       params: {
         min: 1,
         max: 10

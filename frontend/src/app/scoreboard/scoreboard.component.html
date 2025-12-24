@@ -42,7 +42,7 @@
       </thead>
       <tbody>
       @for (entry of top4to10; track entry.username; let i = $index) {
-        <tr><td>#{{i+4}}</td><td>Spieler {{entry.username}}</td><td>{{ entry.score }} Punkte</td></tr>
+        <tr><td>#{{i+4}}</td><td>{{entry.username}}</td><td>{{ entry.score }} Punkte</td></tr>
       }
       </tbody>
     </table>
